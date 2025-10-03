@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sorteos PRO Venezuela – $10.000 en efectivo</title>
+  <meta name="description" content="Participa en el sorteo de $10.000 en efectivo. Tickets a Bs. 489. Fecha: 13 de octubre de 2025 (Lotería de Supergana)." />
+  <style>
+    :root{
+      --black:#000000;
+      --white:#ffffff;
+      --gold:#D4AF37;
+      --gold-2:#C9A227;
+      --surface:#0b0b0b;
+      --muted:#9ca3af;
+      --ok:#16a34a;
+      --warn:#eab308;
+      --error:#ef4444;
+      --radius:14px;
+      --shadow:0 8px 24px rgba(0,0,0,.35);
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--black);color:var(--white);font-family:var(--font);}
+    a{color:var(--gold)}
+    .wrap{max-width:1120px;margin:0 auto;padding:24px}
+    header{
+      background:linear-gradient(to bottom, #000 0%, #050505 60%, #0b0b0b 100%);
+      border-bottom:1px solid #1a1a1a;
+    }
+    .brand{display:flex; gap:16px; align-items:center; padding:28px 0 12px}
+    .brand img{height:56px;width:auto;display:block;filter:drop-shadow(0 2px 6px rgba(0,0,0,.3));}
+    .brand .title{font-weight:800; letter-spacing:.06em}
+    .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(212,175,55,.12);border:1px solid rgba(212,175,55,.35);color:var(--gold);padding:6px 10px;border-radius:999px;font-size:12px}
+    h1{font-size: clamp(26px, 3vw, 36px); margin:8px 0 0; line-height:1.15}
+    h2{font-size: clamp(20px, 2.6vw, 28px); margin:0 0 12px}
+    p{line-height:1.5;color:#e5e7eb;margin:0 0 10px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); border:1px solid #1f2937; border-radius:var(--radius); box-shadow:var(--shadow); padding:22px}
+    .grid{display:grid; gap:18px}
+    @media (min-width: 860px){ .grid-cols-2{grid-template-columns: 1.2fr .8fr;} }
+    .pill{display:inline-flex; padding:6px 12px; border-radius:999px; background:#111827; border:1px solid #1f2937; color:#d1d5db;}
+    .kv{display:flex; gap:12px; align-items:center; padding:8px 0; border-bottom:1px dashed #1f2937}
+    .kv:last-child{border-bottom:none}
+    .kv b{color:var(--gold)}
+    .price{font-weight:800; font-size: clamp(28px, 3vw, 36px); color:var(--gold);}
+    .muted{color:var(--muted)}
+    .btn{appearance:none; border:none; cursor:pointer; background:var(--gold); color:#111; padding:14px 16px; border-radius:12px; font-weight:800; letter-spacing:.02em; transition:.2s transform ease}
+    .btn:hover{transform:translateY(-1px)}
+    .btn.secondary{background:transparent;color:var(--gold);border:1px solid var(--gold)}
+    .btn.full{width:100%}
+    .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+    .qty{display:flex;align-items:center; gap:10px}
+    .qty .box{display:flex; align-items:center; border:1px solid #283241; background:#0c111b; border-radius:12px; padding:8px}
+    .qty input{all:unset;width:92px;text-align:center;font-variant-numeric:tabular-nums;font-weight:700}
+    .chip{padding:10px 14px;border:1px solid #283241;background:#0c111b;color:#e5e7eb;border-radius:999px;cursor:pointer}
+    .chip[data-active=\"1\"]{background:var(--gold); color:#111; border-color:var(--gold)}
+    .hr{height:1px;background:#1f2937;margin:10px 0 14px}
+    .list{display:grid;grid-template-columns: repeat(auto-fit, minmax(120px,1fr)); gap:10px}
+    .num{border:1px solid rgba(255,255,255,.3); border-radius:12px; padding:10px; text-align:center; font-variant-numeric:tabular-nums; background:#0c111b}
+    .note{background:#0c111b;border:1px dashed #334155;border-radius:12px;padding:10px;color:#cbd5e1}
+    footer{border-top:1px solid #1a1a1a;margin-top:28px}
+    .small{font-size:12px}
+    /* Modal */
+    dialog{border:none;border-radius:16px;background:#0b0b0b;color:#fff;max-width:720px;width:calc(100% - 24px); box-shadow:var(--shadow)}
+    dialog::backdrop{background:rgba(0,0,0,.65)}
+    .modal-head{display:flex; align-items:center; justify-content:space-between; padding:10px 16px; border-bottom:1px solid #1f2937}
+    .modal-body{padding:16px}
+    .close{background:transparent;border:1px solid #293548;color:#cbd5e1;border-radius:10px;padding:6px 10px;cursor:pointer}
+    label{display:block;margin:8px 0 4px;color:#e5e7eb}
+    input,select{width:100%;background:#0c111b;border:1px solid #283241;color:#fff;padding:12px;border-radius:10px}
+    .two{display:grid;gap:12px}
+    @media (min-width:680px){.two{grid-template-columns:1fr 1fr}}
+    .countdown{display:flex;gap:8px; align-items:center}
+    .timer{display:inline-flex;gap:6px}
+    .box-timer{background:#0c111b;border:1px solid #283241; min-width:40px; text-align:center; padding:6px 8px; border-radius:8px; font-variant-numeric:tabular-nums}
+    .ok{color:#86efac}.warn{color:#fde68a}.err{color:#fecaca}
+    .copy{cursor:pointer; user-select:none}
+    .sr{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="brand">
+        <img src="./assets/logo.png" alt="Sorteos PRO Venezuela – logo" />
+        <div>
+          <span class="badge">Lotería de Supergana • 13 Oct 2025</span>
+          <h1 class="title">Sorteo <span style="color:var(--gold)">US$ 10.000</span> en efectivo</h1>
+          <p class="muted">Tickets a <b class="price">Bs. 489</b>. 10.000 números (0000–9999), asignación aleatoria sin repetición.</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap grid grid-cols-2">
+    <section class="card">
+      <h2>Elige cuántos boletos quieres</h2>
+      <div class="row qty" style="margin:10px 0 8px">
+        <div class="box">
+          <button id="minus" class="close" title="Restar">−</button>
+          <input id="qty" type="text" inputmode="numeric" pattern="\\d*" value="1" aria-label="Cantidad de boletos" />
+          <button id="plus" class="close" title="Sumar">+</button>
+        </div>
+        <div class="row">
+          <button class="chip" data-q="1">1</button>
+          <button class="chip" data-q="2">2</button>
+          <button class="chip" data-q="5">5</button>
+          <button class="chip" data-q="10">10</button>
+          <button class="chip" data-q="25">25</button>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div class="row" style="justify-content:space-between; align-items:center">
+        <div>
+          <div class="muted small">Total a pagar</div>
+          <div id="total" class="price">Bs. 489</div>
+        </div>
+        <button id="participar" class="btn">Participar</button>
+      </div>
+      <p class="note" style="margin-top:14px">Al continuar verás los datos del Pago Móvil (Banco Provincial). Debes pagar el <b>monto exacto</b> y luego reportar tu pago con banco emisor, cédula, teléfono y <b>últimos 6 dígitos</b> de la referencia.</p>
+    </section>
+
+    <aside class="card">
+      <h2>Detalles del sorteo</h2>
+      <div class="kv"><b>Premio</b> <span>US$ 10.000 en efectivo</span></div>
+      <div class="kv"><b>Fecha</b> <span>13 de octubre de 2025</span></div>
+      <div class="kv"><b>Organiza</b> <span>Lotería de Supergana</span></div>
+      <div class="kv"><b>Números</b> <span>0000–9999 (10.000 únicos)</span></div>
+      <div class="kv"><b>Precio</b> <span>Bs. 489 por ticket</span></div>
+      <div class="kv"><b>Beneficiario Pago Móvil</b> <span>Banco Provincial • <span id="pv-phone" class="copy" title="Copiar teléfono">0424 4150022</span> • C.I. <span id="pv-ci" class="copy" title="Copiar cédula">15.857.050</span></span></div>
+      <p class="muted small">Los resultados se anuncian el 13/10/2025. Conserva el comprobante y la captura de tus números.</p>
+    </aside>
+  </main>
+
+  <footer class="wrap">
+    <div class="small muted">© 2025 Sorteos PRO Venezuela</div>
+  </footer>
+
+  <!-- Modal: Datos para Pago Móvil -->
+  <dialog id="modal-pago">
+    <div class="modal-head">
+      <strong>Realiza tu Pago Móvil</strong>
+      <button class="close" onclick="closeModal('modal-pago')">Cerrar</button>
+    </div>
+    <div class="modal-body">
+      <div class="two">
+        <div class="card">
+          <h3>1) Paga el monto exacto</h3>
+          <div class="kv"><b>Banco</b> <span>Banco Provincial</span></div>
+          <div class="kv"><b>Teléfono</b> <span id="copy-phone" class="copy">0424 4150022</span></div>
+          <div class="kv"><b>Cédula</b> <span id="copy-ci" class="copy">15.857.050</span></div>
+          <div class="kv"><b>Monto</b> <span id="monto-exacto">Bs. 0</span> <span class="small muted">&nbsp;(<span id="copiar-monto" class="copy">copiar</span>)</span></div>
+          <p class="note small">Paga exactamente este monto. Si es diferente, la verificación podría rechazarse.</p>
+        </div>
+        <form id="form-reporte" class="card" onsubmit="return false;">
+          <h3>2) Reporta tu pago</h3>
+          <label for="banco-emisor">Banco emisor</label>
+          <select id="banco-emisor" required>
+            <option value=\"\">Selecciona un banco…</option>
+            <option>Banco Provincial</option>
+            <option>Banco de Venezuela</option>
+            <option>Banco Mercantil</option>
+            <option>BBVA Provincial</option>
+            <option>Banesco</option>
+            <option>Banco Nacional de Crédito</option>
+            <option>Bancamiga</option>
+            <option>Banco del Tesoro</option>
+            <option>Mi Banco</option>
+            <option>Banco Exterior</option>
+          </select>
+          <div class="two">
+            <div>
+              <label for="ci-emisor">Cédula (solo números)</label>
+              <input id="ci-emisor" inputmode="numeric" maxlength="10" placeholder="Ej: 15857050" required />
+            </div>
+            <div>
+              <label for="tlf-emisor">Teléfono</label>
+              <input id="tlf-emisor" inputmode="tel" maxlength="12" placeholder="04244150022" required />
+            </div>
+          </div>
+          <div class="two">
+            <div>
+              <label for="ref6">Últimos 6 de la referencia</label>
+              <input id="ref6" inputmode="numeric" pattern="\\d{6}" maxlength="6" placeholder="123456" required />
+            </div>
+            <div>
+              <label for="fecha">Fecha del pago</label>
+              <input id="fecha" type="date" required />
+            </div>
+          </div>
+          <div class="countdown small muted" style="margin-top:8px">
+            <span>Tiempo para completar:</span>
+            <div class="timer" aria-live="polite">
+              <span class="box-timer" id="mm">10</span><span>:</span><span class="box-timer" id="ss">00</span>
+            </div>
+          </div>
+          <div class="hr"></div>
+          <button id="confirmar-pago" class="btn full">Confirmar pago y obtener números</button>
+        </form>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal: Resultados -->
+  <dialog id="modal-ok">
+    <div class="modal-head">
+      <strong>¡Compra aprobada 🎉!</strong>
+      <button class="close" onclick="closeModal('modal-ok')">Cerrar</button>
+    </div>
+    <div class="modal-body">
+      <p>Estos son tus números asignados. <b>Haz una captura de pantalla</b> y consérvala.</p>
+      <div id="nums" class="list" style="margin-top:12px"></div>
+      <div class="hr"></div>
+      <button class="btn full" onclick="closeModal('modal-ok')">Volver al inicio</button>
+    </div>
+  </dialog>
+
+<script>
+(() => {
+  const RAFFLE = {
+    id: 'raffle-001',
+    prizeUSD: 10000,
+    drawDateISO: '2025-10-13',
+    drawOrg: 'Lotería de Supergana',
+    priceBs: 489,
+    bank: { banco: 'Banco Provincial', ci: '15857050', phone: '04244150022' },
+    numberRange: { start: 0, end: 9999, pad: 4 }
+  };
+
+  // --- utilidades
+  const $ = (q) => document.querySelector(q);
+  const $$ = (q) => Array.from(document.querySelectorAll(q));
+  const fmtBs = (v) => 'Bs. ' + new Intl.NumberFormat('es-VE',{maximumFractionDigits:0}).format(v);
+
+  const keyAssigned = `assigned_${RAFFLE.id}`;
+  const loadAssigned = () => new Set(JSON.parse(localStorage.getItem(keyAssigned) || '[]'));
+  const saveAssigned = (set) => localStorage.setItem(keyAssigned, JSON.stringify(Array.from(set)));
+
+  // cantidad
+  const qtyEl = $('#qty');
+  const minus = $('#minus');
+  const plus = $('#plus');
+  const totalEl = $('#total');
+  const modalPago = $('#modal-pago');
+  const modalOk = $('#modal-ok');
+  const btnParticipar = $('#participar');
+  const btnConfirmar = $('#confirmar-pago');
+
+  // copiar datos
+  const pvPhone = $('#pv-phone'); const pvCi = $('#pv-ci');
+  const copyPhone = $('#copy-phone'); const copyCi = $('#copy-ci'); const copiarMonto = $('#copiar-monto');
+
+  // timer
+  let seconds = 10 * 60; let tid = null;
+  const mm = $('#mm'), ss = $('#ss');
+
+  function updateTotal(){
+    const q = Math.max(1, parseInt(qtyEl.value.replace(/\\D/g,'')) || 1);
+    qtyEl.value = q;
+    totalEl.textContent = fmtBs(q * RAFFLE.priceBs);
+    $('#monto-exacto').textContent = fmtBs(q * RAFFLE.priceBs);
+  }
+  updateTotal();
+
+  minus.addEventListener('click', () => { qtyEl.value = Math.max(1, (parseInt(qtyEl.value)||1) - 1); updateTotal(); });
+  plus.addEventListener('click', () => { qtyEl.value = Math.min(999, (parseInt(qtyEl.value)||1) + 1); updateTotal(); });
+  qtyEl.addEventListener('input', updateTotal);
+
+  $$('.chip').forEach(ch => ch.addEventListener('click', () => { qtyEl.value = parseInt(ch.dataset.q); updateTotal(); }));
+
+  function openModal(id){
+    document.getElementById(id).showModal();
+  }
+  function closeModal(id){
+    document.getElementById(id).close();
+    if(id === 'modal-pago'){ stopTimer(); seconds = 10*60; renderTimer(); }
+  }
+  window.closeModal = closeModal;
+
+  function startTimer(){
+    stopTimer();
+    tid = setInterval(() => {
+      seconds--;
+      renderTimer();
+      if(seconds <= 0){
+        stopTimer();
+        closeModal('modal-pago');
+        alert('Se agotó el tiempo para completar la compra. Intenta nuevamente.');
+      }
+    }, 1000);
+  }
+  function stopTimer(){ if(tid){ clearInterval(tid); tid = null; } }
+  function renderTimer(){
+    const m = String(Math.floor(seconds / 60)).padStart(2,'0');
+    const s = String(seconds % 60).padStart(2,'0');
+    mm.textContent = m; ss.textContent = s;
+  }
+  renderTimer();
+
+  btnParticipar.addEventListener('click', () => {
+    // prellenar fecha con hoy
+    const today = new Date(); const y = today.getFullYear(); const m = String(today.getMonth()+1).padStart(2,'0'); const d = String(today.getDate()).padStart(2,'0');
+    $('#fecha').value = `${y}-${m}-${d}`;
+    openModal('modal-pago');
+    startTimer();
+  });
+
+  function copy(text){
+    navigator.clipboard.writeText(text).then(()=>{});
+  }
+  pvPhone.addEventListener('click', () => copy('04244150022'));
+  pvCi.addEventListener('click', () => copy('15857050'));
+  copyPhone.addEventListener('click', () => copy('04244150022'));
+  copyCi.addEventListener('click', () => copy('15857050'));
+  copiarMonto.addEventListener('click', () => copy(document.getElementById('monto-exacto').textContent.replace('Bs.','').trim()));
+
+  // Validaciones de inputs
+  $('#ci-emisor').addEventListener('input', (e)=> e.target.value = e.target.value.replace(/\\D/g,'').slice(0,10));
+  $('#tlf-emisor').addEventListener('input', (e)=> e.target.value = e.target.value.replace(/\\D/g,'').slice(0,12));
+  $('#ref6').addEventListener('input', (e)=> e.target.value = e.target.value.replace(/\\D/g,'').slice(0,6));
+
+  function generateUniqueNumbers(count){
+    const assigned = loadAssigned();
+    const pad = RAFFLE.numberRange.pad;
+    const min = RAFFLE.numberRange.start;
+    const max = RAFFLE.numberRange.end;
+    const result = [];
+    let attempts = 0;
+    const limit = 100000; // seguridad
+    while(result.length < count && attempts++ < limit){
+      const n = Math.floor(Math.random() * (max - min + 1)) + min;
+      const s = String(n).padStart(pad, '0');
+      if(!assigned.has(s)){
+        assigned.add(s);
+        result.push(s);
+      }
+    }
+    saveAssigned(assigned);
+    return result;
+  }
+
+  async function reportarPago(){
+    const banco = $('#banco-emisor').value.trim();
+    const ci = $('#ci-emisor').value.trim();
+    const tlf = $('#tlf-emisor').value.trim();
+    const ref6 = $('#ref6').value.trim();
+    const fecha = $('#fecha').value;
+
+    if(!banco || !ci || !tlf || !/^[0-9]{6}$/.test(ref6) || !fecha){
+      alert('Por favor, completa todos los campos correctamente.');
+      return;
+    }
+
+    // --- Simulación local (sin backend): asigna números únicos y muestra pantalla OK
+    const cantidad = parseInt(qtyEl.value) || 1;
+    const nums = generateUniqueNumbers(cantidad);
+    const numsContainer = $('#nums');
+    numsContainer.innerHTML = nums.map(n => `<div class="num">${n}</div>`).join('');
+    closeModal('modal-pago');
+    openModal('modal-ok');
+  }
+
+  btnConfirmar.addEventListener('click', reportarPago);
+})();
+</script>
+</body>
+</html>
