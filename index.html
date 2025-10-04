@@ -64,7 +64,6 @@
     .note{background:#0b1219; border:1px dashed #2a3649; color:#cbd5e1; border-radius:12px; padding:10px; font-size:13px}
     .timer{display:flex; gap:6px; align-items:center; color:#9fb3c8; font-size:13px}
     .box-timer{background:#0d131b; border:1px solid #2a3547; min-width:40px; text-align:center; padding:6px 8px; border-radius:8px; font-variant-numeric:tabular-nums}
-    /* Dropzone simple */
     .drop{border:1px dashed #2a3649; background:#0b1219; border-radius:12px; padding:12px; text-align:center; cursor:pointer}
     .drop input{display:none}
     .small{font-size:12px; color:#9aa6b2}
@@ -83,8 +82,6 @@
 </header>
 
 <div class="wrap page">
-
-  <!-- HERO -->
   <section class="hero">
     <div class="card">
       <div class="thumb">
@@ -94,7 +91,6 @@
       <div style="padding:12px 6px 4px">
         <span class="pill">Lotería de Supergana • 13 Oct 2025</span>
         <h1>Sorteo <span class="gold">US$ 10.000</span></h1>
-        <!-- Quitado: “10.000 números únicos (0000–9999)” -->
         <div class="lead">Tickets a <span class="gold">Bs. 489</span>.</div>
       </div>
 
@@ -129,12 +125,12 @@
         </div>
 
         <p class="note" style="margin-top:10px">
-          Al continuar, verás los datos del Pago Móvil y podrás reportar tu pago. Tras la verificación, se te asignarán tus números y verás la pantalla de confirmación.
+          Al continuar, verás los datos del Pago Móvil, subirás tu captura y recibirás <b>al instante</b> tus números aleatorios.  
+          Luego verificamos manualmente. Si hay algún error, podremos cancelar y liberar esos números.
         </p>
       </div>
     </div>
 
-    <!-- Tarjeta lateral (quitamos el renglón “Números 0000–9999”) -->
     <aside class="card summary">
       <p class="title">Detalles del sorteo</p>
       <div class="list">
@@ -143,10 +139,9 @@
         <div class="item"><span>Organiza</span><b>Lotería de Supergana</b></div>
         <div class="item"><span>Precio</span><b>Bs. 489</b></div>
       </div>
-      <p class="muted" style="margin-top:6px">Los resultados se anuncian el 13/10/2025. Conserva el comprobante y la captura de tus números.</p>
+      <p class="muted" style="margin-top:6px">Resultados: 13/10/2025. Guarda el comprobante y la captura de tus números.</p>
     </aside>
   </section>
-
 </div>
 
 <footer class="wrap">© 2025 Sorteos PRO Venezuela</footer>
@@ -183,7 +178,7 @@
   </div>
 </dialog>
 
-<!-- MODAL — Pago Móvil (estilo tipo kallerrifas) -->
+<!-- MODAL — Pago Móvil -->
 <dialog id="modal-pago">
   <div class="modal-head">
     <strong>Pago Móvil</strong>
@@ -191,12 +186,12 @@
   </div>
   <div class="modal-body">
     <div class="three">
-      <!-- Paso 1 -->
+      <!-- 1) Beneficiario -->
       <div class="card">
         <h3 style="margin:0 0 6px">1) Datos del beneficiario</h3>
         <div class="item"><span>Monto exacto</span><b id="monto-exacto">Bs. 0</b></div>
         <div class="divider"></div>
-        <p class="small">Toca “Mostrar datos” para ver la información del beneficiario.</p>
+        <p class="small">Toca “Mostrar datos” para ver la información.</p>
         <div class="row" style="margin-top:8px">
           <button id="ver-benef" class="btn outline" type="button">Mostrar datos</button>
         </div>
@@ -208,7 +203,7 @@
         </div>
       </div>
 
-      <!-- Paso 2 -->
+      <!-- 2) Subir comprobante -->
       <div class="card">
         <h3 style="margin:0 0 6px">2) Sube tu comprobante</h3>
         <label class="drop" for="comprobante">
@@ -219,7 +214,7 @@
         <p id="file-name" class="small" style="margin-top:6px"></p>
       </div>
 
-      <!-- Paso 3 -->
+      <!-- 3) Reporte -->
       <form id="form-reporte" class="card" onsubmit="return false;">
         <h3 style="margin:0 0 6px">3) Reporta tu pago</h3>
         <label for="banco-emisor">Banco emisor</label>
@@ -261,23 +256,22 @@
           <span class="box-timer" id="mm">10</span><span>:</span><span class="box-timer" id="ss">00</span>
         </div>
         <div class="divider"></div>
-        <button id="confirmar-pago" class="btn green" style="width:100%">Confirmar y obtener números</button>
-        <p class="small" style="margin-top:6px">Tus números quedarán <b>reservados</b> hasta la verificación manual.</p>
+        <button id="confirmar-pago" class="btn green" style="width:100%">Confirmar y obtener números ahora</button>
+        <p class="small" style="margin-top:6px">Tus números quedan asignados de inmediato. Si tu pago no coincide, podrán ser liberados por el administrador.</p>
       </form>
     </div>
   </div>
 </dialog>
 
-<!-- MODAL — Felicitaciones / Números -->
+<!-- MODAL — Números entregados -->
 <dialog id="modal-ok">
   <div class="modal-head">
-    <strong>¡Compra registrada 🎉!</strong>
+    <strong>¡Listo, números asignados 🎉!</strong>
     <button class="btn outline" onclick="closeModal('modal-ok')">Cerrar</button>
   </div>
   <div class="modal-body">
-    <p>Estos son tus números <b>reservados</b>. Haz una captura y consérvala.</p>
+    <p>Estos son tus números asignados. <b>Haz una captura</b> y consérvala.</p>
     <div id="nums" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(90px,1fr)); gap:10px; margin-top:12px"></div>
-    <p class="small">Si el pago es rechazado, los números se liberarán.</p>
     <div class="divider"></div>
     <button class="btn" onclick="closeModal('modal-ok')">Volver al inicio</button>
   </div>
@@ -285,9 +279,7 @@
 
 <!-- Firebase + Lógica -->
 <script type="module">
-  // =========================
-  // Configuración del sorteo
-  // =========================
+  // ===== Configuración del sorteo =====
   const RAFFLE = {
     id: 'raffle-001',
     prizeUSD: 10000,
@@ -295,17 +287,13 @@
     drawOrg: 'Lotería de Supergana',
     priceBs: 489,
     bank: { banco: 'Banco Provincial', ci: '15857050', phone: '04244150022' },
-    // Rango se usa internamente en la BD (no se muestra)
-    numberRange: { start: 0, end: 9999, pad: 4 }
+    numberRange: { start: 0, end: 9999, pad: 4 } // manejado en backend
   };
 
-  // =========================
-  // Utilidades UI
-  // =========================
+  // ===== Utilidades UI =====
   const $ = (q) => document.querySelector(q);
   const $$ = (q) => Array.from(document.querySelectorAll(q));
   const fmtBs = (v) => 'Bs. ' + new Intl.NumberFormat('es-VE',{maximumFractionDigits:0}).format(v);
-
   function openModal(id){ document.getElementById(id).showModal(); }
   function closeModal(id){ document.getElementById(id).close(); }
   window.closeModal = closeModal;
@@ -341,7 +329,7 @@
     box.style.display = (box.style.display === 'none' || box.style.display === '') ? 'block' : 'none';
   });
 
-  // Copiar datos
+  // Copiar datos y archivo
   const copy = (t)=>navigator.clipboard.writeText(t);
   $('#copy-phone').addEventListener('click', ()=> copy(RAFFLE.bank.phone.replace(/\s/g,'')));
   $('#copy-ci').addEventListener('click', ()=> copy(RAFFLE.bank.ci));
@@ -354,7 +342,7 @@
   function startTimer(){ stopTimer(); seconds=10*60; renderTimer(); tid=setInterval(()=>{ seconds--; renderTimer(); if(seconds<=0){ stopTimer(); closeModal('modal-pago'); alert('Tiempo agotado. Intenta nuevamente.'); } },1000); }
   function stopTimer(){ if(tid){ clearInterval(tid); tid=null; } }
 
-  // Abrir flujo
+  // Flujo de modales
   btnParticipar.addEventListener('click', () => {
     openModal('modal-datos');
     const today = new Date(); const y=today.getFullYear(); const m=String(today.getMonth()+1).padStart(2,'0'); const d=String(today.getDate()).padStart(2,'0');
@@ -368,41 +356,53 @@
     startTimer();
   });
 
-  // =========================
-  // Firebase (Web v10 módulos)
-  // =========================
+  // ===== Firebase (CDN módulos v10) =====
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics, isSupported as analyticsSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
   import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import { getFirestore, doc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
   import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
   import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
+  // === Tu configuración de Firebase (la que me pasaste) ===
   const firebaseConfig = {
-    apiKey: "YOUR_FIREBASE_API_KEY",
-    authDomain: "YOUR_FIREBASE_AUTH_DOMAIN",
-    projectId: "YOUR_FIREBASE_PROJECT_ID",
-    storageBucket: "YOUR_FIREBASE_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_FIREBASE_SENDER_ID",
-    appId: "YOUR_FIREBASE_APP_ID"
+    apiKey: "AIzaSyByk16cSCI2VaLgQ4mV4dnr70NE4240XPY",
+    authDomain: "sorteos-pro-venezuela.firebaseapp.com",
+    projectId: "sorteos-pro-venezuela",
+    storageBucket: "sorteos-pro-venezuela.firebasestorage.app",
+    messagingSenderId: "119887004911",
+    appId: "1:119887004911:web:125c6d1a3a06b2c5f3471a",
+    measurementId: "G-926DZ7ZV57"
   };
 
   const app = initializeApp(firebaseConfig);
+
+  // Analytics (sólo si el navegador lo soporta)
+  analyticsSupported().then(s => { if(s) getAnalytics(app); });
+
   const auth = getAuth(app);
   const db = getFirestore(app);
-  const storage = getStorage(app);
+
+  // ---- Storage: corrección automática del bucket si viene con firebasestorage.app
+  const rawBucket = firebaseConfig.storageBucket || "";
+  const fixedBucket = rawBucket.includes("firebasestorage.app")
+    ? rawBucket.replace(".firebasestorage.app", ".appspot.com")
+    : rawBucket; // si ya es .appspot.com lo deja igual
+  const storage = fixedBucket
+    ? getStorage(app, `gs://${fixedBucket}`)
+    : getStorage(app);
+
+  // Functions (us-central1 por defecto; ajusta si usaste otra región)
   const functions = getFunctions(app);
 
-  // Firma anónima para poder subir comprobante y crear orden
+  // Firma anónima para permitir crear orden y subir comprobante
   onAuthStateChanged(auth, (u)=>{ if(!u) signInAnonymously(auth); });
 
-  // =========================
-  // Reportar pago (crea orden, sube comprobante y reserva números)
-  // =========================
+  // ===== Confirmar pago -> asignar números y mostrar =====
   document.getElementById('confirmar-pago').addEventListener('click', reportarPago);
 
   async function reportarPago(){
     try{
-      // Validaciones
       const banco = $('#banco-emisor').value.trim();
       const ciEmisor = $('#ci-emisor').value.trim();
       const tlfEmisor = $('#tlf-emisor').value.trim();
@@ -416,8 +416,8 @@
         alert('Completa todos los campos y adjunta la captura.'); return;
       }
 
-      // 1) Crear orden "draft"
-      const orderId = crypto.randomUUID().replace(/-/g,'').slice(0,20); // id corto legible
+      // 1) Crear orden base
+      const orderId = crypto.randomUUID().replace(/-/g,'').slice(0,20);
       const orderRef = doc(db, 'orders', orderId);
       const totalBs = qty * RAFFLE.priceBs;
 
@@ -431,7 +431,7 @@
           tlf: $('#tlf').value.trim(),
         },
         report: { bancoEmisor:banco, ciEmisor, tlfEmisor, ref6, fecha },
-        status: 'draft', // pasará a 'pending' tras reserva
+        status: 'draft',
         ownerUid: auth.currentUser.uid,
         createdAt: serverTimestamp()
       });
@@ -439,23 +439,24 @@
       // 2) Subir comprobante
       if(file.size > 5*1024*1024){ alert('La imagen supera 5 MB.'); return; }
       const ext = (file.name.split('.').pop()||'jpg').toLowerCase();
-      const ref = storageRef(storage, `orders/${orderId}/comprobante.${ext}`);
-      await uploadBytes(ref, file, { contentType: file.type || 'image/jpeg' });
-      const comprobanteUrl = await getDownloadURL(ref);
+      const refUp = storageRef(storage, `orders/${orderId}/comprobante.${ext}`);
+      await uploadBytes(refUp, file, { contentType: file.type || 'image/jpeg' });
+      const comprobanteUrl = await getDownloadURL(refUp);
       await updateDoc(orderRef, { comprobanteUrl });
 
-      // 3) Reservar números (Cloud Function)
-      const reserveNumbers = httpsCallable(functions, 'reserveNumbers');
-      const resp = await reserveNumbers({ raffleId: RAFFLE.id, orderId, qty });
-      const numbers = resp.data.numbers || [];
+      // 3) Asignar números inmediatamente + (backend notifica por correo/WhatsApp)
+      const assignNumbers = httpsCallable(functions, 'assignNumbers');
+      const resp = await assignNumbers({ raffleId: RAFFLE.id, orderId, qty });
+      const numbers = resp.data?.numbers || [];
 
-      // 4) Mostrar confirmación
+      // 4) Mostrar al usuario
       const box = document.getElementById('nums');
       box.innerHTML = numbers.map(n => `<div class="item" style="justify-content:center"><b style="letter-spacing:.1em">${n}</b></div>`).join('');
       stopTimer(); closeModal('modal-pago'); openModal('modal-ok');
+
     }catch(err){
       console.error(err);
-      alert('No se pudo registrar el pago. Intenta de nuevo.');
+      alert('No se pudo registrar el pago. Verifica tu conexión o inténtalo de nuevo.');
     }
   }
 </script>
