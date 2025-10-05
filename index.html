@@ -73,7 +73,6 @@
             <button id="plus" class="btn outline" style="padding:8px 12px">+</button>
           </div>
         </div>
-
         <div class="chips" style="margin-bottom:10px">
           <div class="chip" data-q="1">1</div>
           <div class="chip" data-q="2">2<span>Más popular</span></div>
@@ -209,7 +208,7 @@
     bank: { banco: 'Banco Provincial', ci: '15857050', phone: '04244150022' },
     numberRange: { start: 0, end: 9999, pad: 4 }
   };
-  // 👉 Pega aquí la URL de tu Apps Script (termina en /exec):
+  // 👉 Tu Apps Script (ya lo pegaste). Lo dejo aquí integrado:
   const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxWDOMeqQPnXx9BEPfpiSLmNgl6gplXpfRz_bIsIayJ9B1DTEDUafT2jkTfoOtjpzDP/exec';
 
   // ========= Utilidades UI =========
@@ -244,11 +243,11 @@
   btnParticipar.addEventListener('click', () => { openModal('modal-datos'); const today = new Date(); const y=today.getFullYear(); const m=String(today.getMonth()+1).padStart(2,'0'); const d=String(today.getDate()).padStart(2,'0'); $('#fecha').value = `${y}-${m}-${d}`; });
   $('#ir-pago').addEventListener('click', () => { const form = document.getElementById('form-datos'); if(!form.checkValidity()){ form.reportValidity(); return; } closeModal('modal-datos'); openModal('modal-pago'); startTimer(); });
 
-  // ========= Firebase (solo Auth + Firestore) =========
+  // ========= Firebase (Auth + Firestore) =========
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getAnalytics, isSupported as analyticsSupported } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
   import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  import { getFirestore, doc, setDoc, updateDoc, serverTimestamp, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  import { getFirestore, doc, setDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyByk16cSCI2VaLgQ4mV4dnr70NE4240XPY",
@@ -263,30 +262,26 @@
   analyticsSupported().then(s => { if(s) getAnalytics(app); });
 
   const auth = getAuth(app);
-  const db = getFirestore(app);
+  const db   = getFirestore(app);
   onAuthStateChanged(auth, (u)=>{ if(!u) signInAnonymously(auth); });
 
-  // ========= Helpers =========
   const pad = (n) => String(n).padStart(RAFFLE.numberRange.pad,'0');
 
+  // ======= ASIGNACIÓN sin leer el doc (respeta reglas y evita CORS de lectura) =======
   async function tryAssignOne(orderId){
-    for(let attempt=0; attempt<80; attempt++){
-      const n = Math.floor(Math.random()*(RAFFLE.numberRange.end+1));
-      const id = pad(n);
-      const nRef = doc(db, `raffles/${RAFFLE.id}/numbers/${id}`);
+    // intenta actualizar un número aleatorio a 'assigned'
+    for(let attempt=0; attempt<160; attempt++){
+      const id  = pad(Math.floor(Math.random()*(RAFFLE.numberRange.end+1)));
+      const ref = doc(db, `raffles/${RAFFLE.id}/numbers/${id}`);
       try{
-        const result = await runTransaction(db, async (tx)=>{
-          const snap = await tx.get(nRef);
-          if(!snap.exists()) throw 'noexists';
-          const data = snap.data();
-          if(data.status !== 'available') throw 'taken';
-          tx.update(nRef, { status:'assigned', assignedTo: orderId, assignedAt: serverTimestamp() });
-          return id;
-        });
-        return result;
-      }catch(e){ /* ocupado; reintentar */ }
+        await updateDoc(ref, { status:'assigned', assignedTo: orderId, assignedAt: serverTimestamp() });
+        return id; // éxito
+      }catch(e){
+        // Not-found o permiso denegado porque no estaba available -> probar otro
+        // console.debug('reintento número', id, e?.code || e);
+      }
     }
-    throw new Error('No fue posible encontrar un número disponible ahora');
+    throw new Error('No fue posible encontrar un número disponible en este momento.');
   }
 
   async function assignNumbersClient(orderId, qty){
@@ -298,14 +293,14 @@
     return picked;
   }
 
-  // Lee un archivo y devuelve {base64, type, name}
+  // ======= Apps Script: subir comprobante + notificar (text/plain evita preflight) =======
   function readAsBase64(file){
     return new Promise((resolve, reject)=>{
       const fr = new FileReader();
       fr.onload = () => {
         const res = String(fr.result||'');
-        const [,meta, b64] = res.match(/^data:(.*?);base64,(.*)$/) || [];
-        resolve({ base64: b64, type: meta || file.type || 'image/jpeg', name: file.name || 'comprobante.jpg' });
+        const [,meta,b64] = res.match(/^data:(.*?);base64,(.*)$/) || [];
+        resolve({ base64:b64, type: meta || file.type || 'image/jpeg', name: file.name || 'comprobante.jpg' });
       };
       fr.onerror = reject;
       fr.readAsDataURL(file);
@@ -313,26 +308,25 @@
   }
 
   async function uploadToAppsScript(file, orderId){
-    const {base64, type, name} = await readAsBase64(file);
+    const { base64, type, name } = await readAsBase64(file);
     const resp = await fetch(WEB_APP_URL, {
-      method:'POST',
-      headers: { 'Content-Type':'application/json' },
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action:'upload', orderId, fileBase64: base64, fileType: type, fileName: name })
     });
     const data = await resp.json().catch(()=>({ok:false}));
-    if(!data.ok) throw new Error('No se pudo subir el comprobante');
+    if(!data.ok || !data.fileUrl) throw new Error('No se pudo subir el comprobante al Apps Script.');
     return data.fileUrl;
   }
 
   async function notifyEmail(payload){
-    if(!WEB_APP_URL || WEB_APP_URL.includes('PEGAR_AQUI')) return;
     try{
       await fetch(WEB_APP_URL, {
         method:'POST',
-        headers:{ 'Content-Type':'application/json' },
+        headers:{ 'Content-Type':'text/plain;charset=utf-8' },
         body: JSON.stringify({ action:'notify', ...payload })
       });
-    }catch(e){ /* no interrumpe el flujo */ }
+    }catch(e){ /* no bloquea el flujo */ }
   }
 
   // ========= Confirmar pago =========
@@ -366,15 +360,15 @@
         buyer, report, status: 'draft', ownerUid: auth.currentUser.uid, createdAt: serverTimestamp()
       });
 
-      // 2) Subir comprobante al Apps Script (Drive) y guardar URL
+      // 2) Subir comprobante (Apps Script → Drive)
       const comprobanteUrl = await uploadToAppsScript(file, orderId);
       await updateDoc(orderRef, { comprobanteUrl });
 
-      // 3) Asignar números ya
+      // 3) Asignar números ya (sin lectura previa)
       const numbers = await assignNumbersClient(orderId, qty);
       await updateDoc(orderRef, { numbers, status: 'assigned', assignedAt: serverTimestamp() });
 
-      // 4) Mostrar al usuario
+      // 4) Mostrar números al usuario
       const box = document.getElementById('nums');
       box.innerHTML = numbers.map(n => `<div class="item" style="justify-content:center"><b style="letter-spacing:.1em">${n}</b></div>`).join('');
       stopTimer(); closeModal('modal-pago'); openModal('modal-ok');
@@ -383,7 +377,7 @@
       await notifyEmail({ orderId, raffleId: RAFFLE.id, qty, amountBs: totalBs, numbers, buyer, report, comprobanteUrl });
 
     }catch(err){
-      console.error(err);
+      console.error('[Pago] Error:', err);
       alert('No se pudo registrar el pago. Intenta de nuevo.');
     }
   }
