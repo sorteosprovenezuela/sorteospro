@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Admin • Sorteos PRO Venezuela</title>
+  <style>
+    :root{--bg:#0b0d0f;--card:#10151b;--b:#1e2835;--txt:#e5e7eb;--mut:#9aa6b2;--acc:#D4AF37;--ok:#16a34a;--bad:#ef4444}
+    *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--txt);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto}
+    a{color:var(--acc);text-decoration:none} .wrap{max-width:1100px;margin:0 auto;padding:16px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--b);border-radius:14px;padding:14px}
+    .row{display:flex;gap:10px;align-items:center;justify-content:space-between}
+    .btn{appearance:none;border:none;background:var(--acc);color:#111;padding:10px 14px;border-radius:10px;font-weight:800;cursor:pointer}
+    .btn.out{background:transparent;color:var(--acc);border:1px solid var(--acc)}
+    .btn.ok{background:var(--ok);color:#fff}.btn.bad{background:var(--bad);color:#fff}
+    input,select{width:100%;background:#0d121a;border:1px solid #273244;color:#fff;padding:10px;border-radius:10px}
+    table{width:100%;border-collapse:collapse;font-size:14px} th,td{padding:10px;border-bottom:1px solid var(--b)} th{text-align:left;color:#cbd5e1}
+    .mut{color:var(--mut)} .tag{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12px;border:1px solid var(--b);background:#0e141b}
+    .tag.sold{border-color:#1d6a3a;color:#bff7c7;background:#072718}
+    .tag.assigned{border-color:#5a5a1c;color:#fff1a1;background:#2a2a0c}
+    .tag.canceled{border-color:#6a1d1d;color:#ffc2c2;background:#2a0c0c}
+    .grid{display:grid;gap:12px} @media(min-width:880px){.two{grid-template-columns:1fr 2fr}}
+    .right{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+    dialog{border:none;border-radius:14px;background:var(--card);color:var(--txt);max-width:600px;width:calc(100% - 24px);padding:0}
+    dialog::backdrop{background:rgba(0,0,0,.6)} .dlg-h{padding:12px 14px;border-bottom:1px solid var(--b);font-weight:800}
+    .dlg-b{padding:14px}
+    .mono{font-variant-numeric:tabular-nums}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="row" style="margin-bottom:12px">
+    <h2 style="margin:0">Administrador — Sorteos PRO</h2>
+    <div class="right">
+      <span id="who" class="mut"></span>
+      <button id="btn-logout" class="btn out">Salir</button>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <div id="login" class="card" style="display:none">
+    <h3 style="margin:6px 0 10px">Acceso de administrador</h3>
+    <div class="grid two">
+      <div><label>Correo</label><input id="email" type="email" placeholder="admin@correo.com"/></div>
+      <div><label>Contraseña</label><input id="pass" type="password" placeholder="********"/></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div class="mut">Debes existir en <code>admins/{UID}</code> para ver datos.</div>
+      <div class="right"><button id="btn-login" class="btn">Entrar</button></div>
+    </div>
+  </div>
+
+  <!-- Panel -->
+  <div id="panel" style="display:none" class="grid two">
+    <div class="card">
+      <h3 style="margin:6px 0 10px">Filtros</h3>
+      <div class="grid">
+        <select id="flt-status">
+          <option value="assigned">Pendientes (assigned/processing)</option>
+          <option value="sold">Aprobadas (sold)</option>
+          <option value="all">Todas</option>
+        </select>
+        <input id="flt-q" placeholder="Buscar por nombre, CI, ref, orderId…"/>
+        <div class="right">
+          <button id="btn-reload" class="btn out">Actualizar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:6px 0 10px">Órdenes</h3>
+      <div style="overflow:auto">
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Orden</th>
+              <th>Comprador</th>
+              <th>Bancos / Ref</th>
+              <th class="mono">Monto</th>
+              <th>Números</th>
+              <th>Estado</th>
+              <th style="text-align:right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="rows"><tr><td colspan="8" class="mut">Sin datos…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="margin:6px 0 10px">Historial (adminLogs)</h3>
+      <div style="max-height:320px;overflow:auto">
+        <table id="tbllog">
+          <thead>
+            <tr><th>Fecha</th><th>Admin</th><th>Acción</th><th>Orden</th><th>Detalle</th></tr>
+          </thead>
+          <tbody id="logrows"><tr><td colspan="5" class="mut">Aún no hay movimientos…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Diálogo confirmar acción -->
+<dialog id="dlg">
+  <div class="dlg-h" id="dlg-title">Confirmar</div>
+  <div class="dlg-b">
+    <p id="dlg-text" class="mut"></p>
+    <div class="row">
+      <button class="btn out" onclick="dlg.close()">Cancelar</button>
+      <button id="dlg-ok" class="btn bad">Confirmar</button>
+    </div>
+  </div>
+</dialog>
+
+<script type="module">
+  // ========= Firebase =========
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import {
+    getFirestore, doc, getDoc, getDocs, collection, query, where, orderBy, limit, startAfter,
+    writeBatch, serverTimestamp, updateDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyByk16cSCI2VaLgQ4mV4dnr70NE4240XPY",
+    authDomain: "sorteos-pro-venezuela.firebaseapp.com",
+    projectId: "sorteos-pro-venezuela",
+    storageBucket: "sorteos-pro-venezuela.firebasestorage.app",
+    messagingSenderId: "119887004911",
+    appId: "1:119887004911:web:125c6d1a3a06b2c5f3471a",
+    measurementId: "G-926DZ7ZV57"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
+
+  const $ = s => document.querySelector(s);
+  const fmt = (n)=> new Intl.DateTimeFormat('es-VE',{dateStyle:'short', timeStyle:'short'}).format(n);
+  const fmtBs = (v)=> 'Bs. ' + new Intl.NumberFormat('es-VE',{maximumFractionDigits:0}).format(v||0);
+
+  const login = $('#login'), panel = $('#panel'), who = $('#who');
+  const rows = $('#rows'), logrows = $('#logrows');
+  const fltStatus = $('#flt-status'), fltQ = $('#flt-q');
+
+  // ======= Estado de sesión + verificación de admin =======
+  let IS_ADMIN = false;
+  onAuthStateChanged(auth, async (user)=>{
+    if(!user){ login.style.display='block'; panel.style.display='none'; who.textContent=''; return; }
+    who.textContent = user.email || user.uid;
+    // Debe existir /admins/{UID}
+    const adm = await getDoc(doc(db,'admins',user.uid));
+    IS_ADMIN = adm.exists();
+    if(!IS_ADMIN){ alert('Tu usuario no es admin.'); await signOut(auth); return; }
+    login.style.display='none'; panel.style.display='grid';
+    loadOrders(); loadLogs();
+  });
+
+  $('#btn-login').addEventListener('click', async ()=>{
+    try{
+      const email = $('#email').value.trim();
+      const pass  = $('#pass').value.trim();
+      if(!email || !pass){ alert('Completa correo y contraseña'); return; }
+      await signInWithEmailAndPassword(auth, email, pass);
+    }catch(e){ console.error(e); alert('No se pudo iniciar sesión.'); }
+  });
+
+  $('#btn-logout').addEventListener('click', ()=> signOut(auth));
+
+  // ======= Carga de Órdenes =======
+  $('#btn-reload').addEventListener('click', ()=> loadOrders());
+  fltStatus.addEventListener('change', ()=> loadOrders());
+  fltQ.addEventListener('keyup', (e)=>{ if(e.key==='Enter') loadOrders(); });
+
+  async function loadOrders(){
+    rows.innerHTML = `<tr><td colspan="8" class="mut">Cargando…</td></tr>`;
+    try{
+      // Base: orders más recientes
+      let qref;
+      const base = collection(db,'orders');
+      if(fltStatus.value==='sold'){
+        qref = query(base, where('status','==','sold'), orderBy('assignedAt','desc'), limit(50));
+      }else if(fltStatus.value==='assigned'){
+        // mostrar assigned + processing como pendientes
+        qref = query(base, where('status','in',['assigned','processing']), orderBy('createdAt','desc'), limit(50));
+      }else{
+        qref = query(base, orderBy('createdAt','desc'), limit(100));
+      }
+      const snap = await getDocs(qref);
+      const qstr = fltQ.value.trim().toLowerCase();
+
+      const data = [];
+      snap.forEach(docu=>{
+        const d = docu.data(); d.id = docu.id;
+        // filtro textual opcional
+        const probe = `${d.id} ${d.buyer?.nombre||''} ${d.buyer?.ci||''} ${d.report?.ref6||''}`.toLowerCase();
+        if(qstr && !probe.includes(qstr)) return;
+        data.push(d);
+      });
+
+      if(!data.length){ rows.innerHTML = `<tr><td colspan="8" class="mut">Sin resultados…</td></tr>`; return; }
+      rows.innerHTML = data.map(d => trOrder(d)).join('');
+      // enlazar botones
+      data.forEach(d=>{
+        const oid = d.id;
+        $('#ap_'+oid)?.addEventListener('click', ()=> confirmAction('aprobar', d));
+        $('#re_'+oid)?.addEventListener('click', ()=> confirmAction('rechazar', d));
+        $('#rl_'+oid)?.addEventListener('click', ()=> confirmAction('liberar', d, true));
+        $('#cp_'+oid)?.addEventListener('click', ()=> { if(d.comprobanteUrl) window.open(d.comprobanteUrl,'_blank'); });
+      });
+    }catch(e){
+      console.error(e);
+      rows.innerHTML = `<tr><td colspan="8" class="mut">Error al cargar.</td></tr>`;
+    }
+  }
+
+  function trOrder(d){
+    const dt = d.createdAt?.toDate?.() ? d.createdAt.toDate() : new Date();
+    const tag = (st)=>{
+      const c = st==='sold'?'sold':(st==='assigned'||st==='processing')?'assigned':'canceled';
+      return `<span class="tag ${c}">${st}</span>`;
+    };
+    const nums = Array.isArray(d.numbers) && d.numbers.length ? d.numbers.join(', ') : '—';
+    const comp = d.comprobanteUrl ? `<button id="cp_${d.id}" class="btn out">Comprobante</button>` : '';
+    const actions = `
+      <div class="right">
+        <button id="ap_${d.id}" class="btn ok">Aprobar</button>
+        <button id="re_${d.id}" class="btn bad">Rechazar y liberar</button>
+        <button id="rl_${d.id}" class="btn out">Solo liberar números</button>
+        ${comp}
+      </div>`;
+    return `<tr>
+      <td class="mono">${fmt(dt)}</td>
+      <td class="mono">${d.id}</td>
+      <td>${esc(d.buyer?.nombre)}<br><span class="mut">CI ${esc(d.buyer?.ci)} • ${esc(d.buyer?.tlf)}</span></td>
+      <td>${esc(d.report?.bancoEmisor)||'—'}<br><span class="mut">Ref ${esc(d.report?.ref6)||'—'} • ${esc(d.report?.fecha)||'—'}</span></td>
+      <td class="mono">${fmtBs(d.amountBs)}</td>
+      <td class="mono">${nums}</td>
+      <td>${tag(d.status||'—')}</td>
+      <td>${actions}</td>
+    </tr>`;
+  }
+
+  function esc(v){ return (v==null?'':String(v)).replace(/[<>&]/g,s=>({ '<':'&lt;','>':'&gt;','&':'&amp;' }[s])); }
+
+  // ======= Confirmaciones + acciones =======
+  const dlg = $('#dlg'), dlgTitle = $('#dlg-title'), dlgText = $('#dlg-text'), dlgOk = $('#dlg-ok');
+  let _pendingAction = null;
+
+  function confirmAction(kind, order, onlyRelease=false){
+    if(kind==='aprobar'){
+      dlgTitle.textContent = 'Aprobar orden';
+      dlgText.innerHTML = `Orden <b>${order.id}</b> — se marcará <b>sold</b> y se bloquearán ${order.numbers?.length||0} números.`;
+      dlgOk.className = 'btn ok';
+      _pendingAction = ()=> approveOrder(order);
+    }else if(kind==='rechazar'){
+      dlgTitle.textContent = 'Rechazar y liberar';
+      dlgText.innerHTML = `Orden <b>${order.id}</b> — se marcará <b>canceled</b> y se <b>liberarán</b> ${order.numbers?.length||0} números.`;
+      dlgOk.className = 'btn bad';
+      _pendingAction = ()=> rejectAndRelease(order);
+    }else{
+      dlgTitle.textContent = 'Liberar números';
+      dlgText.innerHTML = `Orden <b>${order.id}</b> — se <b>liberarán</b> ${order.numbers?.length||0} números (el estado de la orden no cambia).`;
+      dlgOk.className = 'btn out';
+      _pendingAction = ()=> releaseNumbers(order);
+    }
+    dlg.showModal();
+  }
+  dlgOk.addEventListener('click', async ()=>{ try{ await _pendingAction?.(); dlg.close(); await loadOrders(); await loadLogs(); }catch(e){ console.error(e); alert('Hubo un error ejecutando la acción.'); } });
+
+  // ======= Lógica de aprobación / liberación =======
+  async function approveOrder(order){
+    if(!Array.isArray(order.numbers) || !order.numbers.length) return;
+    const batch = writeBatch(db);
+    for(const n of order.numbers){
+      const nref = doc(db, `raffles/raffle-001/numbers/${n}`);
+      batch.update(nref, { status:'sold', soldOrderId: order.id });
+    }
+    batch.update(doc(db,'orders',order.id), { status:'sold', soldAt: serverTimestamp() });
+    await batch.commit();
+    await logAction('approve', order, `Se aprobaron ${order.numbers.length} números (${order.numbers.join(', ')})`);
+  }
+
+  async function rejectAndRelease(order){
+    await releaseNumbers(order, true);
+  }
+
+  async function releaseNumbers(order, alsoCancel=false){
+    if(!Array.isArray(order.numbers) || !order.numbers.length){
+      if(alsoCancel){ await updateDoc(doc(db,'orders',order.id), { status:'canceled', canceledAt: serverTimestamp() }); }
+      await logAction(alsoCancel?'cancel':'release', order, 'No había números que liberar'); return;
+    }
+    const batch = writeBatch(db);
+    for(const n of order.numbers){
+      const nref = doc(db, `raffles/raffle-001/numbers/${n}`);
+      batch.update(nref, { status:'available' , assignedTo: null, assignedAt: null, soldOrderId: null });
+    }
+    if(alsoCancel){
+      batch.update(doc(db,'orders',order.id), { status:'canceled', canceledAt: serverTimestamp() });
+    }
+    await batch.commit();
+    await logAction(alsoCancel?'cancel':'release', order, `Se liberaron ${order.numbers.length} números (${order.numbers.join(', ')})`);
+  }
+
+  // ======= Historial (auditoría) =======
+  async function logAction(action, order, detail){
+    try{
+      const u = auth.currentUser;
+      const ref = doc(collection(db,'adminLogs'));
+      await updateDoc(ref, {}); // fuerza crear con serverTimestamp via fallback si falla set; nos aseguramos abajo con try/catch
+    }catch(_){}
+    // usamos add via writeBatch para asegurar serverTimestamp
+    const batch = writeBatch(db);
+    const logRef = doc(collection(db,'adminLogs'));
+    batch.set(logRef, {
+      ts: serverTimestamp(),
+      action, orderId: order.id, numbers: order.numbers||[],
+      prevStatus: order.status||null,
+      adminUid: auth.currentUser?.uid || null,
+      adminEmail: auth.currentUser?.email || null,
+      detail: detail||''
+    });
+    await batch.commit();
+  }
+
+  async function loadLogs(){
+    logrows.innerHTML = `<tr><td colspan="5" class="mut">Cargando…</td></tr>`;
+    try{
+      const snap = await getDocs(query(collection(db,'adminLogs'), orderBy('ts','desc'), limit(50)));
+      const list = [];
+      snap.forEach(d=> list.push({id:d.id, ...d.data()}) );
+      if(!list.length){ logrows.innerHTML = `<tr><td colspan="5" class="mut">Aún no hay movimientos…</td></tr>`; return; }
+      logrows.innerHTML = list.map(l=>{
+        const dt = l.ts?.toDate?.() ? l.ts.toDate() : new Date();
+        return `<tr>
+          <td class="mono">${fmt(dt)}</td>
+          <td>${esc(l.adminEmail)||l.adminUid||'—'}</td>
+          <td><span class="tag">${esc(l.action)}</span></td>
+          <td class="mono">${esc(l.orderId)}</td>
+          <td class="mut">${esc(l.detail)}</td>
+        </tr>`;
+      }).join('');
+    }catch(e){
+      console.error(e); logrows.innerHTML = `<tr><td colspan="5" class="mut">Error al cargar historial.</td></tr>`;
+    }
+  }
+</script>
+</body>
+</html>
