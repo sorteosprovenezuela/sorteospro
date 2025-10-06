@@ -119,9 +119,12 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import {
-    getFirestore, doc, getDoc, getDocs, collection, query, where, orderBy, limit, startAfter,
-    writeBatch, serverTimestamp, updateDoc
+    getFirestore, doc, getDoc, getDocs, collection, query, orderBy, limit,
+    writeBatch, serverTimestamp
   } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  // ====== Apps Script para correos ======
+  const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyNu500-X1p5SlUW0PruPXqV69u_9vHEPZtipSNhfBqZOTMJAArYoNKxM7aDjjU07-U/exec';
 
   const firebaseConfig = {
     apiKey: "AIzaSyByk16cSCI2VaLgQ4mV4dnr70NE4240XPY",
@@ -149,12 +152,11 @@
   onAuthStateChanged(auth, async (user)=>{
     if(!user){ login.style.display='block'; panel.style.display='none'; who.textContent=''; return; }
     who.textContent = user.email || user.uid;
-    // Debe existir /admins/{UID}
     const adm = await getDoc(doc(db,'admins',user.uid));
     IS_ADMIN = adm.exists();
     if(!IS_ADMIN){ alert('Tu usuario no es admin.'); await signOut(auth); return; }
     login.style.display='none'; panel.style.display='grid';
-    loadOrders(); loadLogs();
+    await loadOrders(); await loadLogs();
   });
 
   $('#btn-login').addEventListener('click', async ()=>{
@@ -165,10 +167,9 @@
       await signInWithEmailAndPassword(auth, email, pass);
     }catch(e){ console.error(e); alert('No se pudo iniciar sesión.'); }
   });
-
   $('#btn-logout').addEventListener('click', ()=> signOut(auth));
 
-  // ======= Carga de Órdenes =======
+  // ======= Carga de Órdenes (sin índices compuestos) =======
   $('#btn-reload').addEventListener('click', ()=> loadOrders());
   fltStatus.addEventListener('change', ()=> loadOrders());
   fltQ.addEventListener('keyup', (e)=>{ if(e.key==='Enter') loadOrders(); });
@@ -176,26 +177,21 @@
   async function loadOrders(){
     rows.innerHTML = `<tr><td colspan="8" class="mut">Cargando…</td></tr>`;
     try{
-      // Base: orders más recientes
-      let qref;
-      const base = collection(db,'orders');
-      if(fltStatus.value==='sold'){
-        qref = query(base, where('status','==','sold'), orderBy('assignedAt','desc'), limit(50));
-      }else if(fltStatus.value==='assigned'){
-        // mostrar assigned + processing como pendientes
-        qref = query(base, where('status','in',['assigned','processing']), orderBy('createdAt','desc'), limit(50));
-      }else{
-        qref = query(base, orderBy('createdAt','desc'), limit(100));
-      }
+      // Traemos las más recientes y filtramos en cliente por estado / texto
+      const qref = query(collection(db,'orders'), orderBy('createdAt','desc'), limit(120));
       const snap = await getDocs(qref);
       const qstr = fltQ.value.trim().toLowerCase();
+      const mode = fltStatus.value;
 
       const data = [];
       snap.forEach(docu=>{
         const d = docu.data(); d.id = docu.id;
-        // filtro textual opcional
+        // filtro textual
         const probe = `${d.id} ${d.buyer?.nombre||''} ${d.buyer?.ci||''} ${d.report?.ref6||''}`.toLowerCase();
         if(qstr && !probe.includes(qstr)) return;
+        // filtro status
+        if(mode==='sold' && d.status!=='sold') return;
+        if(mode==='assigned' && !['assigned','processing'].includes(d.status)) return;
         data.push(d);
       });
 
@@ -241,7 +237,6 @@
       <td>${actions}</td>
     </tr>`;
   }
-
   function esc(v){ return (v==null?'':String(v)).replace(/[<>&]/g,s=>({ '<':'&lt;','>':'&gt;','&':'&amp;' }[s])); }
 
   // ======= Confirmaciones + acciones =======
@@ -249,19 +244,20 @@
   let _pendingAction = null;
 
   function confirmAction(kind, order, onlyRelease=false){
+    const count = Array.isArray(order.numbers)?order.numbers.length:0;
     if(kind==='aprobar'){
       dlgTitle.textContent = 'Aprobar orden';
-      dlgText.innerHTML = `Orden <b>${order.id}</b> — se marcará <b>sold</b> y se bloquearán ${order.numbers?.length||0} números.`;
+      dlgText.innerHTML = `Orden <b>${order.id}</b> — se marcará <b>sold</b> y se bloquearán ${count} números.`;
       dlgOk.className = 'btn ok';
       _pendingAction = ()=> approveOrder(order);
     }else if(kind==='rechazar'){
       dlgTitle.textContent = 'Rechazar y liberar';
-      dlgText.innerHTML = `Orden <b>${order.id}</b> — se marcará <b>canceled</b> y se <b>liberarán</b> ${order.numbers?.length||0} números.`;
+      dlgText.innerHTML = `Orden <b>${order.id}</b> — se marcará <b>canceled</b> y se <b>liberarán</b> ${count} números.`;
       dlgOk.className = 'btn bad';
       _pendingAction = ()=> rejectAndRelease(order);
     }else{
       dlgTitle.textContent = 'Liberar números';
-      dlgText.innerHTML = `Orden <b>${order.id}</b> — se <b>liberarán</b> ${order.numbers?.length||0} números (el estado de la orden no cambia).`;
+      dlgText.innerHTML = `Orden <b>${order.id}</b> — se <b>liberarán</b> ${count} números (el estado de la orden no cambia).`;
       dlgOk.className = 'btn out';
       _pendingAction = ()=> releaseNumbers(order);
     }
@@ -271,15 +267,38 @@
 
   // ======= Lógica de aprobación / liberación =======
   async function approveOrder(order){
-    if(!Array.isArray(order.numbers) || !order.numbers.length) return;
+    if(!Array.isArray(order.numbers) || !order.numbers.length){
+      alert('La orden no tiene números asignados.'); return;
+    }
     const batch = writeBatch(db);
     for(const n of order.numbers){
-      const nref = doc(db, `raffles/raffle-001/numbers/${n}`);
-      batch.update(nref, { status:'sold', soldOrderId: order.id });
+      batch.update(doc(db, `raffles/raffle-001/numbers/${n}`), { status:'sold', soldOrderId: order.id });
     }
     batch.update(doc(db,'orders',order.id), { status:'sold', soldAt: serverTimestamp() });
     await batch.commit();
-    await logAction('approve', order, `Se aprobaron ${order.numbers.length} números (${order.numbers.join(', ')})`);
+
+    // Correo definitivo al comprador (Apps Script)
+    try{
+      const boletoUrl = `${location.origin}${location.pathname.replace('admin.html','')}#/ticket/${order.id}`;
+      await fetch(WEB_APP_URL, {
+        method:'POST',
+        headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          action: 'notifySold',
+          orderId: order.id,
+          raffleId: order.raffleId || 'raffle-001',
+          qty: order.qty,
+          amountBs: order.amountBs,
+          numbers: order.numbers,
+          buyer: order.buyer,
+          buyerEmail: order.buyer?.correo || '',
+          comprobanteUrl: order.comprobanteUrl || '',
+          boletoUrl
+        })
+      });
+    }catch(e){ console.warn('No se pudo enviar email de aprobado:', e); }
+
+    await logAction('approve', order, `Aprobada: ${order.numbers.join(', ')}`);
   }
 
   async function rejectAndRelease(order){
@@ -287,41 +306,34 @@
   }
 
   async function releaseNumbers(order, alsoCancel=false){
-    if(!Array.isArray(order.numbers) || !order.numbers.length){
-      if(alsoCancel){ await updateDoc(doc(db,'orders',order.id), { status:'canceled', canceledAt: serverTimestamp() }); }
-      await logAction(alsoCancel?'cancel':'release', order, 'No había números que liberar'); return;
-    }
     const batch = writeBatch(db);
-    for(const n of order.numbers){
-      const nref = doc(db, `raffles/raffle-001/numbers/${n}`);
-      batch.update(nref, { status:'available' , assignedTo: null, assignedAt: null, soldOrderId: null });
+    if(Array.isArray(order.numbers)){
+      for(const n of order.numbers){
+        batch.update(doc(db, `raffles/raffle-001/numbers/${n}`), { status:'available', assignedTo:null, assignedAt:null, soldOrderId:null });
+      }
     }
     if(alsoCancel){
       batch.update(doc(db,'orders',order.id), { status:'canceled', canceledAt: serverTimestamp() });
     }
     await batch.commit();
-    await logAction(alsoCancel?'cancel':'release', order, `Se liberaron ${order.numbers.length} números (${order.numbers.join(', ')})`);
+    await logAction(alsoCancel?'cancel':'release', order, alsoCancel?'Rechazada y liberados números':'Liberados números');
   }
 
   // ======= Historial (auditoría) =======
   async function logAction(action, order, detail){
     try{
-      const u = auth.currentUser;
       const ref = doc(collection(db,'adminLogs'));
-      await updateDoc(ref, {}); // fuerza crear con serverTimestamp via fallback si falla set; nos aseguramos abajo con try/catch
-    }catch(_){}
-    // usamos add via writeBatch para asegurar serverTimestamp
-    const batch = writeBatch(db);
-    const logRef = doc(collection(db,'adminLogs'));
-    batch.set(logRef, {
-      ts: serverTimestamp(),
-      action, orderId: order.id, numbers: order.numbers||[],
-      prevStatus: order.status||null,
-      adminUid: auth.currentUser?.uid || null,
-      adminEmail: auth.currentUser?.email || null,
-      detail: detail||''
-    });
-    await batch.commit();
+      const b = writeBatch(db);
+      b.set(ref, {
+        ts: serverTimestamp(),
+        action, orderId: order.id, numbers: order.numbers||[],
+        prevStatus: order.status||null,
+        adminUid: auth.currentUser?.uid || null,
+        adminEmail: auth.currentUser?.email || null,
+        detail: detail||''
+      });
+      await b.commit();
+    }catch(e){ console.error('logAction error', e); }
   }
 
   async function loadLogs(){
