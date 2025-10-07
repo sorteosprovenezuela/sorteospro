@@ -2,73 +2,71 @@
 <html lang="es">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Sorteos PRO Venezuela — US$ 10.000</title>
-<meta name="description" content="Participa por US$ 10.000. Tickets a Bs. 489. Sorteo 13/10/2025 por Lotería de Supergana.">
-
+<meta name="description" content="Participa por US$ 10.000. Tickets a Bs. 489. Sorteo 13/10/2025 por Lotería de Supergana." />
 <style>
-:root{
-  --bg:#0b0d0f; --surface:#0f1317; --card:#10151b; --line:#1f2937;
-  --txt:#e5e7eb; --mut:#9aa6b2; --gold:#D4AF37; --ok:#16a34a; --r:16px;
-  --shadow:0 8px 30px rgba(0,0,0,.35);
-}
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--txt);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto}
-.wrap{max-width:1100px;margin:0 auto;padding:16px}
+  :root{
+    --black:#0b0d0f; --white:#fff; --muted:#a5b0bb; --gold:#D4AF37;
+    --green:#16a34a; --card:#12161b; --line:#1f2a37; --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--black);color:#e7eef8;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
 
-header{position:sticky;top:0;z-index:40;background:linear-gradient(180deg,rgba(0,0,0,.9),rgba(0,0,0,.55));backdrop-filter:saturate(1.1) blur(6px);border-bottom:1px solid #151a21}
-.nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{display:flex;gap:10px;align-items:center}
-.brand img{height:34px}
-.btn{appearance:none;border:none;cursor:pointer;font-weight:800;border-radius:12px;padding:12px 16px;transition:.15s transform ease}
-.btn:hover{transform:translateY(-1px)}
-.btn.out{background:transparent;border:1px solid var(--gold);color:var(--gold)}
-.btn.ok{background:var(--ok);color:#fff}
+  header{position:sticky;top:0;z-index:10;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);border-bottom:1px solid #151a21}
+  .wrap{max-width:1100px;margin:0 auto;padding:14px}
+  .nav{display:flex;align-items:center;justify-content:space-between}
+  .brand{display:flex;gap:10px;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #233042;background:#0b1117;color:#cbd5e1;padding:6px 10px;border-radius:999px;font-size:12px}
 
-.page{padding:16px 0 32px}
-.card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);padding:16px}
-.pill{display:inline-flex;align-items:center;gap:8px;border:1px solid #233042;background:#0b1117;color:#cbd5e1;padding:6px 10px;border-radius:999px;font-size:12px}
-h1{margin:8px 0 2px;font-size:clamp(20px,4.2vw,34px)}
-.lead{color:#c7cad1}
-.gold{color:var(--gold)}
-.divider{height:1px;background:#1f2937;margin:12px 0}
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;padding:14px 0 28px}
+  @media (max-width: 980px){ .hero{grid-template-columns:1fr} }
 
-.hero{display:grid;grid-template-columns:1fr 380px;gap:18px}
-@media (max-width:990px){ .hero{grid-template-columns:1fr} }
-.thumb{border-radius:14px;overflow:hidden;background:#000}
-.thumb img{width:100%;height:auto;display:block;aspect-ratio:16/9;object-fit:cover}
+  .card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));border:1px solid var(--line);border-radius:var(--radius);padding:14px}
+  .thumb{aspect-ratio:16/9;border-radius:14px;overflow:hidden}
 
-.qty{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.qty .box{display:flex;align-items:center;border:1px solid #283241;background:#0c111b;border-radius:12px;padding:8px}
-.qty input{all:unset;width:86px;text-align:center;font-variant-numeric:tabular-nums;font-weight:800}
-.chips{display:grid;grid-template-columns:repeat(3,minmax(120px,1fr));gap:10px}
-@media (max-width:480px){ .chips{grid-template-columns:repeat(2,minmax(120px,1fr))} }
-.chip{padding:14px;border-radius:12px;background:#0e141c;border:1px solid #253245;text-align:center;font-weight:700;cursor:pointer}
-.chip .hint{display:block;font-size:12px;color:#9aa6b2;margin-top:3px}
+  h1{margin:10px 0 4px;font-size:clamp(22px,4vw,36px);color:#fff}
+  .lead{color:#c9d3de}
+  .gold{color:var(--gold)}
+  .divider{height:1px;background:var(--line);margin:12px 0}
 
-.list{display:grid;gap:8px}
-.item{display:flex;justify-content:space-between;gap:8px;border:1px solid #1f2937;background:#0c111b;border-radius:12px;padding:10px}
-.muted{color:var(--mut);font-size:13px}
-.price{font-weight:800;font-size:clamp(22px,3vw,28px);color:var(--gold)}
-footer{border-top:1px solid #171b22;padding:24px 0;margin-top:24px;color:#a1a7b0;font-size:13px}
+  /* Controles */
+  .kv{display:flex;gap:10px;align-items:center}
+  .qty{display:flex;gap:8px;align-items:center}
+  .box{display:flex;align-items:center;border:1px solid #283241;background:#0c111b;border-radius:12px;padding:8px}
+  .btn{appearance:none;border:none;border-radius:12px;padding:12px 15px;font-weight:800;cursor:pointer;transition:.15s}
+  .btn:disabled{opacity:.6;cursor:not-allowed}
+  .btn.outline{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+  .btn.green{background:var(--green);color:#fff}
+  .btn.dark{background:#0f141a;color:#fff;border:1px solid #2a3443}
+  .btn:hover{transform:translateY(-1px)}
+  input[type="text"],input[type="email"],input[type="tel"],input[type="date"],select{
+    width:100%;background:#0d121a;border:1px solid #273244;color:#fff;padding:12px;border-radius:10px
+  }
 
-dialog{border:none;border-radius:18px;background:#0c1116;color:#fff;max-width:860px;width:calc(100% - 24px);box-shadow:var(--shadow)}
-dialog::backdrop{background:rgba(0,0,0,.7)}
-.modal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #1a2432}
-.modal-body{padding:16px}
-label{display:block;margin:6px 0 4px;color:#cbd5e1}
-input,select{width:100%;background:#0d121a;border:1px solid #273244;color:#fff;padding:12px;border-radius:10px}
-.two{display:grid;gap:12px}
-@media (min-width:700px){ .two{grid-template-columns:1fr 1fr} }
-.three{display:grid;gap:12px}
-@media (min-width:860px){ .three{grid-template-columns:1fr 1fr 1fr} }
-.note{background:#0b1219;border:1px dashed #2a3649;color:#cbd5e1;border-radius:12px;padding:10px;font-size:13px}
-.timer{display:flex;gap:6px;align-items:center;color:#9fb3c8;font-size:13px}
-.box-timer{background:#0d131b;border:1px solid #2a3547;min-width:40px;text-align:center;padding:6px 8px;border-radius:8px;font-variant-numeric:tabular-nums}
-.drop{border:1px dashed #2a3649;background:#0b1219;border-radius:12px;padding:12px;text-align:center;cursor:pointer}
-.drop input{display:none}
-.small{font-size:12px;color:#9aa6b2}
-.mono{font-variant-numeric:tabular-nums}
+  .chips{display:grid;grid-template-columns:repeat(3,minmax(90px,1fr));gap:10px}
+  .chip{padding:14px;border-radius:12px;background:#0e141c;border:1px solid #253245;text-align:center;cursor:pointer;font-weight:700}
+  .chip span{display:block;font-size:12px;color:#9aa6b2;margin-top:2px}
+  .price{font-weight:800;font-size:clamp(22px,3vw,28px);color:var(--gold)}
+  .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .muted{color:#9fb0c0;font-size:13px}
+  .grid{display:grid;gap:10px}
+  .two{grid-template-columns:1fr 1fr}
+  .three{grid-template-columns:1fr 1fr 1fr}
+  @media (max-width:700px){ .two,.three{grid-template-columns:1fr} }
+
+  /* Modal */
+  dialog{border:none;border-radius:18px;background:#0c1116;color:#fff;max-width:880px;width:calc(100% - 24px);box-shadow:0 20px 50px rgba(0,0,0,.5)}
+  dialog::backdrop{background:rgba(0,0,0,.7)}
+  .modal-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #1a2432}
+  .modal-body{padding:16px}
+
+  /* Success ticket (tipo “Gana con Iván”) */
+  .success{padding:24px;text-align:center}
+  .success h2{margin:6px 0 14px}
+  .ticket{background:#0d141a;border:1px dashed #2b394b;border-radius:14px;padding:12px 18px;font-weight:800;letter-spacing:.12em}
 </style>
 </head>
 <body>
@@ -76,431 +74,368 @@ input,select{width:100%;background:#0d121a;border:1px solid #273244;color:#fff;p
 <header>
   <div class="wrap nav">
     <div class="brand">
-      <img src="./assets/logo.png" alt="Sorteos PRO" onerror="this.style.display='none'">
+      <img src="./assets/logo.png" alt="Sorteos PRO" style="height:32px;width:auto">
       <b>Sorteos PRO</b>
     </div>
-    <a href="#" class="btn out">Telegram</a>
+    <a href="#" class="btn outline">Telegram</a>
   </div>
 </header>
 
-<div class="wrap page">
+<div class="wrap">
   <section class="hero">
+    <!-- Izquierda -->
     <div class="card">
       <div class="thumb">
-        <img id="promo" src="./assets/promo.jpg" alt="Promoción"
-             onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1601582585289-4e04f1a3aa31?q=80&w=1600&auto=format&fit=crop'">
+        <!-- Sube tu imagen a /assets/promo.jpg en el repo -->
+        <img src="./assets/promo.jpg" alt="Promo del sorteo">
       </div>
 
       <div style="padding:12px 6px 4px">
         <span class="pill">Lotería de Supergana • 13 Oct 2025</span>
         <h1>Sorteo <span class="gold">US$ 10.000</span></h1>
-        <div class="lead">Tickets a <span class="gold">Bs. 489</span>.</div>
+        <div class="lead">Tickets a <span class="gold">Bs. 489</span>. Números 0000–9999 únicos.</div>
       </div>
 
       <div class="divider"></div>
 
       <div style="padding:6px 6px 14px">
-        <div class="qty" style="margin:10px 0">
+        <div class="kv"><b class="gold">Elige tus boletos</b></div>
+
+        <div class="qty" style="margin:10px 0 10px">
           <div class="box">
-            <button id="minus" class="btn out" style="padding:8px 12px">−</button>
-            <input id="qty" inputmode="numeric" pattern="\d*" value="1" aria-label="Cantidad de boletos"/>
-            <button id="plus" class="btn out" style="padding:8px 12px">+</button>
+            <button id="minus" class="btn dark" style="padding:8px 12px">−</button>
+            <input id="qty" type="text" inputmode="numeric" pattern="\d*" value="1" aria-label="Cantidad de boletos" style="width:76px;text-align:center;font-variant-numeric:tabular-nums;font-weight:800;background:transparent;border:none;color:#fff" />
+            <button id="plus" class="btn dark" style="padding:8px 12px">+</button>
           </div>
         </div>
 
         <div class="chips" style="margin-bottom:10px">
           <div class="chip" data-q="1">1</div>
-          <div class="chip" data-q="2">2<span class="hint">Más popular</span></div>
+          <div class="chip" data-q="2">2<span>Más popular</span></div>
           <div class="chip" data-q="5">5</div>
           <div class="chip" data-q="10">10</div>
           <div class="chip" data-q="25">25</div>
           <div class="chip" data-q="50">50</div>
         </div>
 
-        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+        <div class="row">
           <div>
             <div class="muted">Total a pagar</div>
             <div class="price" id="total">Bs. 489</div>
           </div>
-          <button id="participar" class="btn ok">Participar</button>
+          <button id="participar" class="btn green">Participar</button>
         </div>
 
-        <p class="note" style="margin-top:10px">
-          Al continuar, verás los datos del Pago Móvil, subirás tu captura y recibirás <b>al instante</b> tus números.
+        <p class="muted" style="margin-top:10px">
+          Al continuar verás Pago Móvil, subirás tu captura y recibirás <b>al instante</b> tus números aleatorios.
           Si el pago no coincide, el administrador puede liberarlos.
         </p>
       </div>
     </div>
 
+    <!-- Derecha -->
     <aside class="card">
       <p style="font-weight:800;margin:0 0 6px">Detalles del sorteo</p>
-      <div class="list">
-        <div class="item"><span>Premio</span><b>US$ 10.000</b></div>
-        <div class="item"><span>Fecha</span><b>13/10/2025</b></div>
-        <div class="item"><span>Organiza</span><b>Lotería de Supergana</b></div>
-        <div class="item"><span>Precio</span><b>Bs. 489</b></div>
+      <div class="grid" style="grid-template-columns:1fr;gap:8px">
+        <div class="row" style="background:#0c111b;border:1px solid var(--line);border-radius:12px;padding:10px"><span>Premio</span><b>US$ 10.000</b></div>
+        <div class="row" style="background:#0c111b;border:1px solid var(--line);border-radius:12px;padding:10px"><span>Fecha</span><b>13/10/2025</b></div>
+        <div class="row" style="background:#0c111b;border:1px solid var(--line);border-radius:12px;padding:10px"><span>Organiza</span><b>Lotería de Supergana</b></div>
+        <div class="row" style="background:#0c111b;border:1px solid var(--line);border-radius:12px;padding:10px"><span>Números</span><b>0000–9999</b></div>
+        <div class="row" style="background:#0c111b;border:1px solid var(--line);border-radius:12px;padding:10px"><span>Precio</span><b>Bs. 489</b></div>
       </div>
-      <p class="muted" style="margin-top:6px">Resultados: 13/10/2025.</p>
+      <p class="muted" style="margin-top:6px">Resultados el 13/10/2025. Guarda tu comprobante y la captura de tus números.</p>
     </aside>
   </section>
 </div>
 
-<footer class="wrap">© 2025 Sorteos PRO Venezuela</footer>
+<footer class="wrap" style="border-top:1px solid #171b22;padding:24px 0;color:#a1a7b0;font-size:13px">
+  © 2025 Sorteos PRO Venezuela
+</footer>
 
-<!-- MODAL Datos -->
+<!-- MODAL DATOS -->
 <dialog id="modal-datos">
   <div class="modal-head">
     <strong>Indica tus datos</strong>
-    <button class="btn out" onclick="closeModal('modal-datos')">Cerrar</button>
+    <button class="btn outline" onclick="closeModal('modal-datos')">Cerrar</button>
   </div>
   <div class="modal-body">
-    <form id="form-datos" class="two" onsubmit="return false;">
-      <div><label for="nombre">Nombre completo</label><input id="nombre" required/></div>
-      <div><label for="correo">Correo</label><input id="correo" type="email" required/></div>
-      <div><label for="ci">Cédula (solo números)</label><input id="ci" inputmode="numeric" maxlength="10" required/></div>
-      <div><label for="tlf">Teléfono</label><input id="tlf" inputmode="tel" maxlength="12" required/></div>
-    </form>
-    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:14px">
-      <button class="btn out" onclick="closeModal('modal-datos')">Cancelar</button>
-      <button id="ir-pago" class="btn ok">Continuar al pago</button>
+    <div class="grid two">
+      <div>
+        <label>Nombre completo</label>
+        <input id="nombre" placeholder="Ej.: Juan Pérez" />
+      </div>
+      <div>
+        <label>Correo electrónico</label>
+        <input id="correo" type="email" placeholder="tu@correo.com" />
+      </div>
+      <div>
+        <label>Cédula (solo números)</label>
+        <input id="ci" inputmode="numeric" maxlength="10" placeholder="15857050" />
+      </div>
+      <div>
+        <label>Teléfono</label>
+        <input id="tlf" inputmode="tel" maxlength="12" placeholder="04244150022" />
+      </div>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn dark" onclick="closeModal('modal-datos')">Cancelar</button>
+      <button id="ir-pago" class="btn green">Continuar al pago</button>
     </div>
   </div>
 </dialog>
 
-<!-- MODAL Pago -->
+<!-- MODAL PAGO -->
 <dialog id="modal-pago">
   <div class="modal-head">
     <strong>Pago Móvil</strong>
-    <button class="btn out" onclick="closeModal('modal-pago')">Cerrar</button>
+    <button class="btn outline" onclick="closeModal('modal-pago')">Cerrar</button>
   </div>
   <div class="modal-body">
-    <div class="three">
+    <div class="grid three">
       <div class="card">
         <h3 style="margin:0 0 6px">1) Datos del beneficiario</h3>
-        <div class="item"><span>Monto exacto</span><b id="monto-exacto">Bs. 0</b></div>
+        <div class="row" style="background:#0c111b;border:1px solid var(--line);border-radius:12px;padding:10px"><span>Monto exacto</span><b id="monto-exacto">Bs. 0</b></div>
         <div class="divider"></div>
-        <p class="small">Toca “Mostrar datos”.</p>
-        <div style="margin-top:8px"><button id="ver-benef" class="btn out" type="button">Mostrar datos</button></div>
-        <div id="benef" style="display:none;margin-top:10px">
-          <div class="item"><span>Banco</span><b>Banco Provincial</b></div>
-          <div class="item"><span>Teléfono</span><b id="copy-phone" style="cursor:pointer">0424 4150022</b></div>
-          <div class="item"><span>Cédula</span><b id="copy-ci" style="cursor:pointer">15.857.050</b></div>
-          <p class="small">Toca para copiar.</p>
+        <div class="grid">
+          <div class="row" style="background:#0c111b;border:1px solid var(--line);border-radius:12px;padding:10px"><span>Banco</span><b>Banco Provincial</b></div>
+          <div class="row" style="background:#0c111b;border:1px solid var(--line);border-radius:12px;padding:10px"><span>Teléfono</span><b>04244150022</b></div>
+          <div class="row" style="background:#0c111b;border:1px solid var(--line);border-radius:12px;padding:10px"><span>Cédula</span><b>15857050</b></div>
         </div>
       </div>
 
       <div class="card">
         <h3 style="margin:0 0 6px">2) Sube tu comprobante</h3>
-        <label class="drop" for="comprobante">
-          <strong>Arrastra aquí o haz clic</strong><br><span class="small">JPG/PNG/HEIC • máx 5 MB</span>
-          <input id="comprobante" type="file" accept="image/*" required/>
-        </label>
-        <p id="file-name" class="small" style="margin-top:6px"></p>
+        <input id="file" type="file" accept="image/*" />
+        <small class="muted">JPG/PNG/HEIC – máx 5 MB</small>
       </div>
 
-      <form id="form-reporte" class="card" onsubmit="return false;">
+      <div class="card">
         <h3 style="margin:0 0 6px">3) Reporta tu pago</h3>
-        <label for="banco-emisor">Banco emisor</label>
-        <select id="banco-emisor" required>
+        <label>Banco emisor</label>
+        <select id="banco-emisor">
           <option value="">Selecciona…</option>
-          <option>Banco Provincial</option><option>Banco de Venezuela</option><option>Banco Mercantil</option>
-          <option>BBVA Provincial</option><option>Banesco</option><option>Banco Nacional de Crédito</option>
-          <option>Bancamiga</option><option>Banco del Tesoro</option><option>Mi Banco</option><option>Banco Exterior</option>
+          <option>Banco Provincial</option>
+          <option>Banco de Venezuela</option>
+          <option>Banco Mercantil</option>
+          <option>BBVA Provincial</option>
+          <option>Banesco</option>
+          <option>Banco Nacional de Crédito</option>
+          <option>Bancamiga</option>
+          <option>Banco del Tesoro</option>
+          <option>Mi Banco</option>
+          <option>Banco Exterior</option>
         </select>
-        <div class="two">
-          <div><label for="ci-emisor">Cédula (solo números)</label><input id="ci-emisor" inputmode="numeric" maxlength="10" required/></div>
-          <div><label for="tlf-emisor">Teléfono</label><input id="tlf-emisor" inputmode="tel" maxlength="12" required/></div>
+
+        <div class="grid two" style="margin-top:8px">
+          <div>
+            <label>Cédula (solo números)</label>
+            <input id="ci-emisor" inputmode="numeric" maxlength="10" />
+          </div>
+          <div>
+            <label>Teléfono</label>
+            <input id="tlf-emisor" inputmode="tel" maxlength="12" />
+          </div>
         </div>
-        <div class="two">
-          <div><label for="ref6">Últimos 6 de la referencia</label><input id="ref6" inputmode="numeric" pattern="\d{6}" maxlength="6" required/></div>
-          <div><label for="fecha">Fecha del pago</label><input id="fecha" type="date" required/></div>
+
+        <div class="grid two" style="margin-top:8px">
+          <div>
+            <label>Últimos 6 de la referencia</label>
+            <input id="ref6" inputmode="numeric" pattern="\d{6}" maxlength="6" />
+          </div>
+          <div>
+            <label>Fecha del pago</label>
+            <input id="fecha" type="date" />
+          </div>
         </div>
-        <div class="timer" style="margin-top:8px"><span>Tiempo: </span><span class="box-timer" id="mm">10</span><span>:</span><span class="box-timer" id="ss">00</span></div>
+
         <div class="divider"></div>
-        <button id="confirmar-pago" class="btn ok" style="width:100%">Confirmar y obtener números ahora</button>
-        <p class="small" style="margin-top:6px">Asignación inmediata.</p>
-      </form>
+        <button id="confirmar" class="btn green" style="width:100%">Confirmar y obtener números ahora</button>
+        <small id="error-msg" class="muted" style="display:block;margin-top:8px;color:#fca5a5"></small>
+      </div>
     </div>
   </div>
 </dialog>
 
-<!-- Firebase compat (sin módulos) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<!-- MODAL OK -->
+<dialog id="modal-ok">
+  <div class="modal-head">
+    <strong>¡Compra aprobada 🎉!</strong>
+    <button class="btn outline" onclick="closeModal('modal-ok')">Cerrar</button>
+  </div>
+  <div class="modal-body success">
+    <p class="muted" style="margin:0 0 10px">Aquí puedes ver los números que has adquirido. Te recomendamos hacer captura.</p>
+    <div id="nums" class="grid" style="grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:10px;margin:10px 0 14px"></div>
+    <button class="btn dark" onclick="location.href='./'">Ir al inicio</button>
+  </div>
+</dialog>
 
-<script>
-/* ================== CONFIG ================== */
-const RAFFLE = {
-  id: 'raffle-001',
-  priceBs: 489,
-  bank: { banco:'Banco Provincial', ci:'15857050', phone:'04244150022' },
-  range: { start:0, end:9999, pad:4 }
-};
-// Apps Script Web App:
-const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyNu500-X1p5SlUW0PruPXqV69u_9vHEPZtipSNhfBqZOTMJAArYoNKxM7aDjjU07-U/exec';
+<script type="module">
+  // ---------- CONFIG ----------
+  const RAFFLE_ID = 'raffle-001';
+  const PRICE_BS  = 489;
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyNu500-X1p5SlUW0PruPXqV69u_9vHEPZtipSNhfBqZOTMJAArYoNKxM7aDjjU07-U/exec';
 
-const firebaseConfig = {
-  apiKey:"AIzaSyByk16cSCI2VaLgQ4mV4dnr70NE4240XPY",
-  authDomain:"sorteos-pro-venezuela.firebaseapp.com",
-  projectId:"sorteos-pro-venezuela",
-  storageBucket:"sorteos-pro-venezuela.firebasestorage.app",
-  messagingSenderId:"119887004911",
-  appId:"1:119887004911:web:125c6d1a3a06b2c5f3471a",
-  measurementId:"G-926DZ7ZV57"
-};
+  // ---------- Firebase v9 ----------
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, collection, doc, getDoc, getDocs, setDoc, addDoc, updateDoc, serverTimestamp, query, where, limit, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* ================== UI helpers ================== */
-const $ = q => document.querySelector(q);
-const $$ = q => Array.from(document.querySelectorAll(q));
-function openModal(id){ document.getElementById(id).showModal() }
-function closeModal(id){ document.getElementById(id).close() }
-window.closeModal = closeModal;
-const fmtBs = v => 'Bs. '+new Intl.NumberFormat('es-VE',{maximumFractionDigits:0}).format(v);
-const pad = n => String(n).padStart(RAFFLE.range.pad,'0');
+  const firebaseConfig = {
+    apiKey: "AIzaSyByk16cSCI2VaLgQ4mV4dnr70NE4240XPY",
+    authDomain: "sorteos-pro-venezuela.firebaseapp.com",
+    projectId: "sorteos-pro-venezuela",
+    storageBucket: "sorteos-pro-venezuela.firebasestorage.app",
+    messagingSenderId: "119887004911",
+    appId: "1:119887004911:web:125c6d1a3a06b2c5f3471a",
+    measurementId: "G-926DZ7ZV57"
+  };
 
-const qtyEl = $('#qty'), minus=$('#minus'), plus=$('#plus'), totalEl=$('#total');
-function updateTotal(){ const q=Math.max(1,parseInt((qtyEl.value||'').replace(/\D/g,''))||1); qtyEl.value=q; totalEl.textContent=fmtBs(q*RAFFLE.priceBs); $('#monto-exacto').textContent=fmtBs(q*RAFFLE.priceBs) }
-updateTotal();
-minus.addEventListener('click',()=>{ qtyEl.value=Math.max(1,(parseInt(qtyEl.value)||1)-1); updateTotal() });
-plus.addEventListener('click',()=>{ qtyEl.value=Math.min(999,(parseInt(qtyEl.value)||1)+1); updateTotal() });
-qtyEl.addEventListener('input',updateTotal);
-$$('.chip').forEach(ch=>ch.addEventListener('click',()=>{ qtyEl.value=parseInt(ch.dataset.q); updateTotal() }));
+  const app  = initializeApp(firebaseConfig);
+  getAnalytics(app);
+  const auth = getAuth(app);
+  const db   = getFirestore(app);
 
-$('#participar').addEventListener('click', ()=>{
-  openModal('modal-datos');
-  const t=new Date(), y=t.getFullYear(), m=String(t.getMonth()+1).padStart(2,'0'), d=String(t.getDate()).padStart(2,'0');
-  $('#fecha').value=`${y}-${m}-${d}`;
-});
-$('#ir-pago').addEventListener('click', ()=>{
-  const f = $('#form-datos'); if(!f.checkValidity()){ f.reportValidity(); return }
-  closeModal('modal-datos'); openModal('modal-pago'); startTimer();
-});
+  // ---------- Util ----------
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+  const fmtBs = v => 'Bs. ' + new Intl.NumberFormat('es-VE',{maximumFractionDigits:0}).format(v);
 
-$('#ver-benef').addEventListener('click', ()=>{
-  const box = $('#benef'); box.style.display = (box.style.display==='none'||!box.style.display)?'block':'none';
-});
-const copy = t => navigator.clipboard.writeText(t);
-$('#copy-phone').addEventListener('click', ()=> copy(RAFFLE.bank.phone.replace(/\s/g,'')));
-$('#copy-ci').addEventListener('click', ()=> copy(RAFFLE.bank.ci));
-$('#comprobante').addEventListener('change', e => $('#file-name').textContent = e.target.files[0]?.name||'');
+  const qtyEl = $('#qty'), minus = $('#minus'), plus = $('#plus'), totalEl = $('#total');
+  const btnParticipar = $('#participar');
 
-['#ci','#tlf','#ci-emisor','#tlf-emisor','#ref6'].forEach(sel=>{
-  $(sel).addEventListener('input', e=>{
-    const lim = sel==='#ref6'?6:(sel.includes('tlf')?12:10);
-    e.target.value = e.target.value.replace(/\D/g,'').slice(0,lim);
-  });
-});
-
-/* ====== Timer ====== */
-let seconds=600, tid=null; const mm=$('#mm'), ss=$('#ss');
-const renderTimer=()=>{ mm.textContent=String(Math.floor(seconds/60)).padStart(2,'0'); ss.textContent=String(seconds%60).padStart(2,'0') }
-function startTimer(){ stopTimer(); seconds=600; renderTimer(); tid=setInterval(()=>{ seconds--; renderTimer(); if(seconds<=0){ stopTimer(); closeModal('modal-pago'); alert('Tiempo agotado.'); } },1000) }
-function stopTimer(){ if(tid){ clearInterval(tid); tid=null } }
-
-/* ================== Firebase init (compat) ================== */
-let db = null;
-try{
-  firebase.initializeApp(firebaseConfig);
-  firebase.auth().signInAnonymously().catch(()=>{});
-  db = firebase.firestore();
-}catch(e){
-  console.warn('Firebase no inició (seguimos con Apps Script):', e);
-}
-
-/* ================== Apps Script helpers ================== */
-async function appsPost(payload){
-  const r = await fetch(WEB_APP_URL, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(payload)
-  });
-  if(!r.ok) throw new Error('HTTP_'+r.status);
-  return r.json();
-}
-function readAsDataURL(file){return new Promise((res,rej)=>{const fr=new FileReader(); fr.onload=()=>res(String(fr.result||'')); fr.onerror=rej; fr.readAsDataURL(file)})}
-async function compressImageIfNeeded(file){
-  try{
-    if(!/image\/(heic|heif)/i.test(file.type) && file.size<=2.5*1024*1024) return file;
-    const url = URL.createObjectURL(file), img = new Image(); img.decoding='async';
-    await new Promise((r,rr)=>{img.onload=r;img.onerror=rr;img.src=url});
-    const maxW=1200,maxH=1200, r=Math.min(maxW/img.naturalWidth,maxH/img.naturalHeight,1);
-    const w=Math.round(img.naturalWidth*r), h=Math.round(img.naturalHeight*r);
-    const canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
-    canvas.getContext('2d').drawImage(img,0,0,w,h);
-    const blob = await new Promise(r=>canvas.toBlob(r,'image/jpeg',.82));
-    URL.revokeObjectURL(url);
-    return new File([blob], (file.name||'comprobante').replace(/\..*$/,'')+'.jpg', {type:'image/jpeg'});
-  }catch{return file}
-}
-async function uploadComprobante(file, orderId){
-  const f = await compressImageIfNeeded(file);
-  const dataURL = await readAsDataURL(f);
-  const m = dataURL.match(/^data:(.*?);base64,(.*)$/);
-  const type = m? m[1] : 'image/jpeg';
-  const b64  = m? m[2] : '';
-  const resp = await appsPost({action:'upload',orderId,fileBase64:b64,fileType:type,fileName:f.name||'comprobante.jpg'});
-  if(!resp.ok||!resp.fileUrl) throw new Error('UPLOAD_FAIL');
-  return resp.fileUrl;
-}
-function notifyAssign(p){ appsPost({action:'notify',...p}).catch(()=>{}) }
-function notifySold(p){ appsPost({action:'notifySold',...p}).catch(()=>{}) }
-
-/* ================== Números: asignación segura ================== */
-async function tryAssignOne(orderId){
-  if(!db) throw new Error('NO_DB');
-  const id = pad(Math.floor(Math.random()*(RAFFLE.range.end+1)));
-  // Intentamos update; si no existe, creamos y marcamos assigned
-  const ref = db.doc(`raffles/${RAFFLE.id}/numbers/${id}`);
-  try{
-    await ref.update({status:'assigned',assignedTo:orderId,assignedAt:firebase.firestore.FieldValue.serverTimestamp()});
-    return id;
-  }catch(e){
-    // si no existe, lo creamos disponible y volvemos a intentar
-    try{ await ref.set({status:'available'} ,{merge:true}) }catch(_){}
-    // segundo intento:
-    await ref.update({status:'assigned',assignedTo:orderId,assignedAt:firebase.firestore.FieldValue.serverTimestamp()});
-    return id;
+  function updateTotal(){
+    const q = Math.max(1, Math.min(999, parseInt(qtyEl.value.replace(/\D/g,'')) || 1));
+    qtyEl.value = q;
+    totalEl.textContent = fmtBs(q * PRICE_BS);
+    $('#monto-exacto').textContent = fmtBs(q * PRICE_BS);
   }
-}
-async function assignNumbers(orderId, qty){
-  const out=[]; for(let i=0;i<qty;i++){ out.push(await tryAssignOne(orderId)) } return out;
-}
+  updateTotal();
+  minus.addEventListener('click', () => { qtyEl.value = Math.max(1, (parseInt(qtyEl.value)||1) - 1); updateTotal(); });
+  plus.addEventListener('click', () => { qtyEl.value = Math.min(999, (parseInt(qtyEl.value)||1) + 1); updateTotal(); });
+  qtyEl.addEventListener('input', updateTotal);
+  $$('.chip').forEach(ch => ch.addEventListener('click', () => { qtyEl.value = parseInt(ch.dataset.q); updateTotal(); }));
 
-/* ================== Confirmar pago (idempotente) ================== */
-const BTN_CONFIRM = $('#confirmar-pago'); const PENDING_KEY='spv_pending_order_id';
-function setProcessing(on){ BTN_CONFIRM.disabled=on; BTN_CONFIRM.textContent = on?'Procesando…':'Confirmar y obtener números ahora' }
-$('#confirmar-pago').addEventListener('click', reportarPago);
+  // ---------- Modales ----------
+  function openModal(id){ document.getElementById(id).showModal(); }
+  function closeModal(id){ document.getElementById(id).close(); }
 
-async function reportarPago(){
-  try{
-    setProcessing(true);
+  btnParticipar.addEventListener('click', () => {
+    openModal('modal-datos');
+    const today = new Date(); const y=today.getFullYear(), m=String(today.getMonth()+1).padStart(2,'0'), d=String(today.getDate()).padStart(2,'0');
+    $('#fecha').value = `${y}-${m}-${d}`;
+  });
 
-    const banco = $('#banco-emisor').value.trim();
-    const ciE   = $('#ci-emisor').value.trim();
-    const tlfE  = $('#tlf-emisor').value.trim();
-    const ref6  = $('#ref6').value.trim();
-    const fecha = $('#fecha').value;
-    const file  = $('#comprobante').files[0];
-    const qty   = Math.max(1,parseInt(qtyEl.value)||1);
-    if(!banco||!ciE||!tlfE||!/^\d{6}$/.test(ref6)||!fecha||!file){ alert('Completa todos los campos y adjunta la captura.'); return }
+  // validaciones menores / máscara
+  $('#ci,#tlf,#ci-emisor,#tlf-emisor,#ref6').addEventListener('input', (e)=>{});
+  ['#ci','#tlf','#ci-emisor','#tlf-emisor'].forEach(id=>{
+    $(id).addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,'').slice(0,id.includes('tlf')?12:10));
+  });
+  $('#ref6').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,'').slice(0,6));
 
-    // Login anónimo si hay Firebase
-    try{ await firebase.auth().signInAnonymously() }catch(_){}
+  $('#ir-pago').addEventListener('click', () => {
+    const ok =
+      $('#nombre').value.trim() &&
+      $('#correo').value.trim() &&
+      $('#ci').value.trim() &&
+      $('#tlf').value.trim();
+    if(!ok){ alert('Completa tus datos.'); return; }
+    closeModal('modal-datos');
+    openModal('modal-pago');
+  });
 
-    // Idempotencia
-    let orderId = sessionStorage.getItem(PENDING_KEY);
-    if(!orderId){ orderId = (crypto.randomUUID?.()||String(Date.now())) .replace(/-/g,'').slice(0,20); sessionStorage.setItem(PENDING_KEY,orderId) }
+  // ---------- Auth anónima ----------
+  let currentUID = null;
+  onAuthStateChanged(auth, (u)=>{
+    if(u){ currentUID = u.uid; }
+  });
+  signInAnonymously(auth).catch(console.error);
 
-    const total = qty*RAFFLE.priceBs;
-    const buyer = { nombre:$('#nombre').value.trim(), correo:$('#correo').value.trim(), ci:$('#ci').value.trim(), tlf:$('#tlf').value.trim() };
-    const report= { bancoEmisor:banco, ciEmisor:ciE, tlfEmisor:tlfE, ref6, fecha };
+  // ---------- Submit ----------
+  let isSubmitting = false;
 
-    // Crea/actualiza orden en Firestore (opcional si db existe)
-    let orderRef=null;
-    if(db){
-      orderRef = db.doc(`orders/${orderId}`);
-      const snap = await orderRef.get();
-      if(!snap.exists){
-        await orderRef.set({ raffleId:RAFFLE.id, qty, priceBsUnit:RAFFLE.priceBs, amountBs:total, buyer, report, status:'draft', createdAt:firebase.firestore.FieldValue.serverTimestamp() });
-      }else{
-        const st = snap.data().status;
-        if(st==='assigned' || st==='sold'){ sessionStorage.removeItem(PENDING_KEY); redirectToTicket(orderId); setProcessing(false); return }
+  $('#confirmar').addEventListener('click', submitOrder);
+
+  async function submitOrder(){
+    if(isSubmitting) return;
+    isSubmitting = true;
+    $('#confirmar').disabled = true;
+    $('#confirmar').textContent = 'Procesando…';
+    $('#error-msg').textContent = '';
+
+    try{
+      // 1) Subir comprobante (Apps Script) – sin headers para evitar preflight/CORS
+      const file = $('#file').files[0];
+      let comprobanteUrl = '';
+      if(file){
+        const fd = new FormData();
+        fd.append('action','upload');
+        fd.append('file', file, file.name);
+        const up = await fetch(SCRIPT_URL, { method:'POST', body: fd }); // no headers!
+        // La respuesta del WebApp debe ser JSON simple: { ok:true, url:"..." }
+        try { const js = await up.json(); if(js && js.url) comprobanteUrl = js.url; } catch(e){}
       }
-      await orderRef.update({ status:'processing', processingAt:firebase.firestore.FieldValue.serverTimestamp() });
-    }
 
-    // Upload comprobante a Apps Script
-    let compUrl = null;
-    if(db){
-      const s = await orderRef.get(); compUrl = s.data().comprobanteUrl || null;
-    }
-    if(!compUrl){ compUrl = await uploadComprobante(file, orderId); if(db) await orderRef.update({ comprobanteUrl:compUrl }) }
+      // 2) Crear la orden "pending"
+      const qty = parseInt(qtyEl.value) || 1;
+      const orderRef = await addDoc(collection(db,'orders'), {
+        uid: currentUID,
+        raffleId: RAFFLE_ID,
+        status: 'pending',
+        qty,
+        amountBs: qty * PRICE_BS,
+        buyer: {
+          nombre: $('#nombre').value.trim(),
+          correo: $('#correo').value.trim(),
+          ci: $('#ci').value.trim(),
+          tlf: $('#tlf').value.trim(),
+          bancoEmisor: $('#banco-emisor').value || '',
+          ciEmisor: $('#ci-emisor').value.trim(),
+          tlfEmisor: $('#tlf-emisor').value.trim(),
+          ref6: $('#ref6').value.trim(),
+          fechaPago: $('#fecha').value
+        },
+        comprobanteUrl,
+        createdAt: serverTimestamp()
+      });
 
-    // Si ya tiene números, ir al boleto
-    if(db){
-      const s2 = await orderRef.get();
-      if(Array.isArray(s2.data().numbers) && s2.data().numbers.length){ sessionStorage.removeItem(PENDING_KEY); redirectToTicket(orderId); setProcessing(false); return }
-    }
-
-    // Asignar números
-    let numbers = [];
-    try{
-      numbers = await assignNumbers(orderId, qty);
-    }catch(e){
-      console.warn('Asignación sin Firestore; generando local (no persistente).', e);
-      // fallback local (solo por si Firebase falla completamente)
-      while(numbers.length<qty){
-        const n = pad(Math.floor(Math.random()*(RAFFLE.range.end+1)));
-        if(!numbers.includes(n)) numbers.push(n);
+      // 3) Elegir números disponibles y asignarlos en transacción
+      const numsCol = collection(db,'raffles',RAFFLE_ID,'numbers');
+      const snap = await getDocs(query(numsCol, where('status','==','available'), limit(qty)));
+      if(snap.size < qty){
+        await updateDoc(orderRef, { status:'soldout' });
+        throw new Error('No hay suficientes números disponibles en este momento.');
       }
+
+      const ids = snap.docs.map(d=>d.id);
+      await runTransaction(db, async (tx)=>{
+        for(const id of ids){
+          const r = doc(db,'raffles',RAFFLE_ID,'numbers',id);
+          const s = await tx.get(r);
+          if(!s.exists()) throw new Error('Número inexistente.');
+          if(s.data().status !== 'available') throw new Error('Colisión: número ya tomado.');
+          tx.update(r, { status:'assigned', orderId: orderRef.id, assignedAt: serverTimestamp() });
+        }
+        tx.update(orderRef, { status:'assigned', numbers: ids, assignedAt: serverTimestamp() });
+      });
+
+      // 4) Éxito → mostrar modal con números
+      const box = $('#nums');
+      box.innerHTML = (await getDoc(orderRef)).data().numbers
+        .map(n => `<div class="ticket">${n}</div>`).join('');
+      closeModal('modal-pago');
+      openModal('modal-ok');
+
+    } catch(err){
+      console.error(err);
+      $('#error-msg').textContent = err.message || 'No se pudo registrar el pago. Intenta de nuevo.';
+      alert('No se pudo registrar el pago. Intenta de nuevo.');
+    } finally {
+      isSubmitting = false;
+      $('#confirmar').disabled = false;
+      $('#confirmar').textContent = 'Confirmar y obtener números ahora';
     }
-
-    if(db){ await orderRef.update({ numbers, status:'assigned', assignedAt:firebase.firestore.FieldValue.serverTimestamp() }) }
-
-    // Notificar por correo (Apps Script)
-    const boletoUrl = `${location.origin}${location.pathname}#/ticket/${orderId}`;
-    notifyAssign({orderId,raffleId:RAFFLE.id,qty,amountBs:total,numbers,buyer,report,comprobanteUrl:compUrl,buyerEmail:buyer.correo,boletoUrl});
-
-    sessionStorage.removeItem(PENDING_KEY);
-    redirectToTicket(orderId);
-
-  }catch(e){
-    console.error(e);
-    alert('No se pudo registrar el pago. Intenta de nuevo.');
-  }finally{
-    setProcessing(false);
   }
-}
-
-/* ================== Boleto ================== */
-function redirectToTicket(orderId){ location.hash=`#/ticket/${orderId}`; closeModal('modal-pago') }
-
-async function cargarBoleto(){
-  const m = location.hash.match(/^#\/ticket\/([A-Za-z0-9_-]+)$/); if(!m) return;
-  const orderId = m[1];
-
-  let order = { id:orderId, numbers:[], comprobanteUrl:null };
-  if(db){
-    try{
-      const s = await db.doc(`orders/${orderId}`).get();
-      if(s.exists) order = Object.assign(order, s.data());
-    }catch(e){ console.warn(e) }
-  }
-
-  const day = new Intl.DateTimeFormat('es-VE',{dateStyle:'long'}).format(new Date());
-  const nums = (order.numbers||[]).join(', ') || '—';
-
-  document.body.innerHTML = `
-  <div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:#0b0d0f;color:#e5e7eb">
-    <div style="max-width:560px;width:100%;background:#10151b;border:1px solid #1f2937;border-radius:14px;padding:22px">
-      <div style="text-align:center;margin-bottom:12px">
-        <img src="./assets/logo.png" alt="Sorteos PRO" style="height:48px" onerror="this.style.display='none'">
-      </div>
-      <h2 style="text-align:center;margin:6px 0 2px">Compra aprobada 🎉</h2>
-      <div style="display:flex;justify-content:center;margin:8px 0 14px">
-        <span style="display:inline-flex;gap:8px;border:1px solid #2a3649;border-radius:999px;padding:6px 10px;color:#cbd5e1">📅 ${day}</span>
-      </div>
-      <p style="text-align:center;color:#cbd5e1;margin:0 0 10px">Estos son tus números:</p>
-      <div style="border:1px dashed #2a3649;border-radius:12px;padding:12px;background:#0b1219;margin:10px 0">
-        <div style="text-align:center;color:#cbd5e1;margin-bottom:6px">Tus números</div>
-        <div class="mono" style="text-align:center;font-size:20px;font-weight:800;letter-spacing:.06em">${nums}</div>
-      </div>
-      ${order.comprobanteUrl?`<p style="text-align:center;margin:10px 0"><a href="${order.comprobanteUrl}" target="_blank">Ver comprobante</a></p>`:''}
-      <div style="display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap">
-        <a href="${location.origin}${location.pathname}" class="btn ok" style="text-decoration:none;background:#16a34a;color:#fff;padding:12px 16px;border-radius:10px;font-weight:800">Ir al inicio</a>
-        <button id="share" class="btn out" style="padding:12px 16px;border-radius:10px;border:1px solid var(--gold);background:transparent;color:var(--gold)">Compartir</button>
-      </div>
-    </div>
-  </div>`;
-  document.getElementById('share')?.addEventListener('click', async ()=>{
-    try{
-      if(navigator.share){ await navigator.share({title:'Sorteos PRO • Boleto',text:`Mis números: ${nums}`,url:location.href}); }
-      else{ await navigator.clipboard.writeText(location.href); alert('Link copiado.'); }
-    }catch(_){}
-  });
-}
-window.addEventListener('hashchange',cargarBoleto); cargarBoleto();
 </script>
 </body>
 </html>
