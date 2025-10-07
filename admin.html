@@ -1,8 +1,7 @@
 <!doctype html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Admin • Sorteos PRO</title>
 <style>
   body{margin:0;background:#0b0d0f;color:#e7eef8;font-family:ui-sans-serif,system-ui,Segoe UI,Roboto,Arial}
@@ -10,21 +9,14 @@
   .card{background:#12161b;border:1px solid #1f2a37;border-radius:14px;padding:14px;margin:10px 0}
   .row{display:flex;gap:8px;align-items:center;justify-content:space-between}
   .btn{appearance:none;border:none;border-radius:10px;padding:10px 12px;font-weight:800;cursor:pointer}
-  .btn.green{background:#16a34a;color:#fff}
-  .btn.red{background:#b91c1c;color:#fff}
-  .btn.dark{background:#0f141a;color:#fff;border:1px solid #2a3443}
-  input,button,select{font:inherit}
-  input,select{background:#0d121a;border:1px solid #273244;color:#fff;padding:10px;border-radius:10px}
-  .muted{color:#9fb0c0;font-size:12px}
-  .grid{display:grid;gap:10px}
-  .two{grid-template-columns:1fr 1fr}
-  @media(max-width:700px){.two{grid-template-columns:1fr}}
+  .btn.green{background:#16a34a;color:#fff} .btn.red{background:#b91c1c;color:#fff} .btn.dark{background:#0f141a;color:#fff;border:1px solid #2a3443}
+  input,button,select{font:inherit} input,select{background:#0d121a;border:1px solid #273244;color:#fff;padding:10px;border-radius:10px}
+  .muted{color:#9fb0c0;font-size:12px} .grid{display:grid;gap:10px} .two{grid-template-columns:1fr 1fr} @media(max-width:700px){.two{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h2>Administrador</h2>
-
   <div class="card">
     <div class="grid two">
       <input id="email" placeholder="admin@correo.com">
@@ -35,65 +27,44 @@
       <small class="muted">Debes tener un documento en <code>admins/{UID}</code>.</small>
     </div>
   </div>
-
   <div id="panel" style="display:none">
-    <div class="row">
-      <h3>Órdenes recientes</h3>
-      <button id="refresh" class="btn dark">Actualizar</button>
-    </div>
+    <div class="row"><h3>Órdenes recientes</h3><button id="refresh" class="btn dark">Actualizar</button></div>
     <div id="list"></div>
   </div>
 </div>
 
 <script type="module">
-  // ---- CONFIG ----
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyNu500-X1p5SlUW0PruPXqV69u_9vHEPZtipSNhfBqZOTMJAArYoNKxM7aDjjU07-U/exec';
-  const RAFFLE_ID  = 'raffle-001';
+  const SCRIPT_URL='https://script.google.com/macros/s/AKfycbyfe88_IsXQIXl3bZ5Rnh9u8bHCkAUCKny913UlWngl8hBdQKGRE1XG2_85gxw37w0/exec';
+  const RAFFLE_ID='raffle-001';
 
-  // ---- Firebase ----
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   import { getFirestore, collection, query, orderBy, limit, getDocs, doc, getDoc, updateDoc, runTransaction } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyByk16cSCI2VaLgQ4mV4dnr70NE4240XPY",
-    authDomain: "sorteos-pro-venezuela.firebaseapp.com",
-    projectId: "sorteos-pro-venezuela",
-    storageBucket: "sorteos-pro-venezuela.firebasestorage.app",
-    messagingSenderId: "119887004911",
-    appId: "1:119887004911:web:125c6d1a3a06b2c5f3471a",
-    measurementId: "G-926DZ7ZV57"
-  };
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db   = getFirestore(app);
-
-  const $ = s=>document.querySelector(s);
+  const firebaseConfig={apiKey:"AIzaSyByk16cSCI2VaLgQ4mV4dnr70NE4240XPY",authDomain:"sorteos-pro-venezuela.firebaseapp.com",projectId:"sorteos-pro-venezuela",storageBucket:"sorteos-pro-venezuela.firebasestorage.app",messagingSenderId:"119887004911",appId:"1:119887004911:web:125c6d1a3a06b2c5f3471a",measurementId:"G-926DZ7ZV57"};
+  const app=initializeApp(firebaseConfig); const auth=getAuth(app); const db=getFirestore(app);
+  const $=s=>document.querySelector(s);
 
   $('#login').addEventListener('click', async ()=>{
     try{
-      const user = await signInWithEmailAndPassword(auth, $('#email').value, $('#pass').value);
-      // verificación admin
-      const adm = await getDoc(doc(db,'admins',user.user.uid));
-      if(!adm.exists()) throw new Error('Este usuario no es admin.');
-      $('#panel').style.display = 'block';
-      load();
-    }catch(e){ alert(e.message || 'Error de inicio de sesión'); }
+      const u=await signInWithEmailAndPassword(auth,$('#email').value,$('#pass').value);
+      const adm=await getDoc(doc(db,'admins',u.user.uid)); if(!adm.exists()) throw new Error('Este usuario no es admin.');
+      $('#panel').style.display='block'; load();
+    }catch(e){ alert(e.message||'Error de inicio de sesión'); }
   });
   $('#refresh').addEventListener('click', load);
 
   async function load(){
-    const q = query(collection(db,'orders'), orderBy('createdAt','desc'), limit(50)); // sin índices compuestos
-    const snap = await getDocs(q);
-    const list = $('#list'); list.innerHTML = '';
+    const q=query(collection(db,'orders'),orderBy('createdAt','desc'),limit(50));
+    const snap=await getDocs(q);
+    const list=$('#list'); list.innerHTML='';
     snap.forEach(d=>{
-      const o = d.data();
-      const el = document.createElement('div');
-      el.className = 'card';
-      el.innerHTML = `
+      const o=d.data();
+      const el=document.createElement('div'); el.className='card';
+      el.innerHTML=`
         <div class="row">
-          <div><b>${o.buyer?.nombre || ''}</b> • <span class="muted">${o.buyer?.correo || ''}</span></div>
-          <div><span class="muted">Bs.</span> <b>${o.amountBs || 0}</b></div>
+          <div><b>${o.buyer?.nombre||''}</b> • <span class="muted">${o.buyer?.correo||''}</span></div>
+          <div><span class="muted">Bs.</span> <b>${o.amountBs||0}</b></div>
         </div>
         <div class="row">
           <div class="muted">Estado: <b>${o.status}</b> • ${o.numbers ? 'Nros: '+o.numbers.join(', ') : ''}</div>
@@ -106,71 +77,40 @@
       `;
       list.appendChild(el);
     });
-
-    // wire buttons
-    list.querySelectorAll('[data-approve]').forEach(btn=>{
-      btn.addEventListener('click', ()=> approve(btn.dataset.approve));
-    });
-    list.querySelectorAll('[data-reject]').forEach(btn=>{
-      btn.addEventListener('click', ()=> reject(btn.dataset.reject));
-    });
+    list.querySelectorAll('[data-approve]').forEach(b=>b.addEventListener('click',()=>approve(b.dataset.approve)));
+    list.querySelectorAll('[data-reject]').forEach(b=>b.addEventListener('click',()=>reject(b.dataset.reject)));
   }
 
   async function approve(orderId){
     try{
-      const ref = doc(db,'orders',orderId);
-      const snap = await getDoc(ref);
-      if(!snap.exists()) return alert('Orden no existe.');
-      const o = snap.data();
-      if(o.status !== 'assigned') return alert('Estado inválido.');
-      // marcar aprobada
-      await updateDoc(ref, { status:'approved', approvedAt: new Date() });
-
-      // Enviar correo por Apps Script
+      const ref=doc(db,'orders',orderId); const snap=await getDoc(ref);
+      if(!snap.exists()) return alert('Orden no existe.'); const o=snap.data();
+      if(o.status!=='assigned') return alert('Estado inválido.');
+      await updateDoc(ref,{status:'approved',approvedAt:new Date()});
       try{
-        await fetch(SCRIPT_URL, {
-          method:'POST',
-          body: JSON.stringify({
-            action:'sendMail',
-            to: o.buyer?.correo || '',
-            subject: 'Sorteos PRO — Compra aprobada',
-            name: o.buyer?.nombre || '',
-            numbers: o.numbers || [],
-            amountBs: o.amountBs || 0,
-            ref6: o.buyer?.ref6 || '',
-            comprobanteUrl: o.comprobanteUrl || ''
-          })
-        });
-      }catch(e){ console.warn('Correo no enviado', e); }
-      alert('Aprobada y correo enviado.');
-      load();
-    }catch(e){ alert(e.message || 'Error al aprobar'); }
+        await fetch(SCRIPT_URL,{method:'POST',body:JSON.stringify({action:'sendMail',to:o.buyer?.correo||'',subject:'Sorteos PRO — Compra aprobada',name:o.buyer?.nombre||'',numbers:o.numbers||[],amountBs:o.amountBs||0,ref6:o.buyer?.ref6||'',comprobanteUrl:o.comprobanteUrl||''})});
+      }catch(e){ console.warn('Correo no enviado',e); }
+      alert('Aprobada y correo enviado.'); load();
+    }catch(e){ alert(e.message||'Error al aprobar'); }
   }
 
   async function reject(orderId){
     if(!confirm('¿Rechazar y liberar números?')) return;
     try{
-      const ref = doc(db,'orders',orderId);
-      const snap = await getDoc(ref);
-      if(!snap.exists()) return alert('Orden no existe.');
-      const o = snap.data();
-      const numbers = o.numbers || [];
-
-      // transacción: liberar cada número
+      const ref=doc(db,'orders',orderId); const snap=await getDoc(ref);
+      if(!snap.exists()) return alert('Orden no existe.'); const o=snap.data(); const numbers=o.numbers||[];
       await runTransaction(db, async (tx)=>{
         for(const id of numbers){
-          const r = doc(db,'raffles',RAFFLE_ID,'numbers',id);
-          const s = await tx.get(r);
-          if(s.exists() && s.data().status === 'assigned' && s.data().orderId === orderId){
-            tx.update(r, { status:'available' });
+          const r=doc(db,'raffles',RAFFLE_ID,'numbers',id);
+          const s=await tx.get(r);
+          if(s.exists()&&s.data().status==='assigned'&&s.data().orderId===orderId){
+            tx.update(r,{status:'available'});
           }
         }
-        tx.update(ref, { status:'canceled', canceledAt: new Date() });
+        tx.update(ref,{status:'canceled',canceledAt:new Date()});
       });
-
-      alert('Orden cancelada y números liberados.');
-      load();
-    }catch(e){ alert(e.message || 'Error al rechazar'); }
+      alert('Orden cancelada y números liberados.'); load();
+    }catch(e){ alert(e.message||'Error al rechazar'); }
   }
 </script>
 </body>
