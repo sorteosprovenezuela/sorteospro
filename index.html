@@ -1,294 +1,127 @@
-<!doctype html>
-<html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Sorteos PRO Venezuela</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎟️</text></svg>">
   <meta name="color-scheme" content="dark light" />
   <link rel="preload" href="assets/promo.jpg" as="image" />
-  <style>
-    :root{
-      --bg:#0f1115; --card:#171a21; --muted:#8b93a7; --text:#e5e7ef;
-      --pri:#16a34a; --pri-2:#15803d; --warn:#f59e0b; --err:#ef4444; --ring:#3b82f6;
-      --radius:16px;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue","Noto Sans",Arial,"Apple Color Emoji","Segoe UI Emoji";}
-
-    header{max-width:1040px;margin:auto;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-    header img{height:36px;width:auto}
-    header a{display:inline-flex;align-items:center;gap:8px;background:#232735;border:1px solid #2c3344;color:#dbe2f9;
-      padding:8px 14px;border-radius:999px;text-decoration:none;font-weight:600}
-    header a:hover{filter:brightness(1.1)}
-
-    .container{max-width:1040px;margin:auto;padding:0 20px 60px}
-    .hero{background:var(--card);border:1px solid #242a3b;border-radius:var(--radius);overflow:hidden}
-    .hero img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
-    .hero .meta{padding:18px 20px;border-top:1px solid #22283a;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
-    .pill{background:#212637;border:1px solid #2b3146;color:#c8d0ec;padding:6px 10px;border-radius:999px;font-size:12px}
-    .title{font-size:22px;font-weight:800}
-    .sub{font-size:14px;color:var(--muted)}
-
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
-    @media (max-width:900px){.grid{grid-template-columns:1fr}}
-    .card{background:var(--card);border:1px solid #242a3b;border-radius:var(--radius);padding:16px}
-    .card h3{margin:0 0 12px 0;font-size:16px}
-    .row{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
-    label{font-size:12px;color:var(--muted)}
-    input,select{width:100%;background:#0e121a;border:1px solid #283047;color:var(--text);
-      padding:12px 14px;border-radius:12px;outline:none}
-    input:focus,select:focus{border-color:var(--ring);box-shadow:0 0 0 3px #3b82f63a}
-    .hint{font-size:12px;color:var(--muted)}
-    .actions{display:flex;gap:10px;align-items:center;justify-content:flex-end}
-
-    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:12px;border:1px solid transparent;
-      padding:14px 16px;font-weight:800;cursor:pointer}
-    .btn-primary{background:var(--pri);color:white}
-    .btn-primary:hover{background:var(--pri-2)}
-    .btn-muted{background:#1d2332;border-color:#2b3146;color:#d1d7ea}
-    .btn:disabled{opacity:.6;cursor:not-allowed}
-
-    .price{font-size:28px;font-weight:900}
-    .muted{color:var(--muted)}
-
-    /* modal */
-    .overlay{position:fixed;inset:0;background:#0008;backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:16px;z-index:50}
-    .overlay.show{display:flex}
-    .modal{width:min(620px,100%);background:var(--card);border:1px solid #2a3043;border-radius:20px;overflow:hidden}
-    .modal .head{padding:16px 18px;border-bottom:1px solid #23283a;display:flex;align-items:center;justify-content:space-between}
-    .modal .body{padding:18px}
-    .ok{font-weight:900;font-size:20px;margin:0 0 6px}
-    .numbers{display:flex;flex-wrap:wrap;gap:8px}
-    .badge{background:#0e121a;border:1px solid #2b3146;padding:10px 12px;border-radius:12px;font-weight:800;min-width:88px;text-align:center}
-    .center{text-align:center}
-    .small{font-size:12px}
-    .error{color:#ffcdd2;background:#5f1d28;padding:10px 12px;border-radius:10px;border:1px solid #7a2a37}
-  </style>
+  <!-- … (deja los estilos tal cual del index anterior) … -->
 </head>
-<body>
+…
+<script>
+  // ============== CONFIG ==============
+  // ⚠️ Pega aquí tu URL /exec EXACTA del deployment ACTIVO (paso 2 de abajo)
+  const API = "https://script.google.com/macros/s/AKfycbyfe88_IsXQIXl3bZ5Rnh9u8bHCkAUCKny913UlWngl8hBdQKGRE1XG2_85gxw37w0/exec";
+  const RAFFLE_ID = "raffle-001";
+  const PRICE_BS  = 489;
 
-  <header>
-    <img src="assets/logo.png" alt="Sorteos PRO" />
-    <a href="https://t.me/+9eFBr7H0QSYyYzYx" target="_blank" rel="noopener">Telegram</a>
-  </header>
+  // ============== Helpers ==============
+  const $ = s => document.querySelector(s);
+  const err = $("#err");
+  const btn = $("#payBtn");
+  const overlay = $("#overlay");
+  const numsBox = $("#nums");
 
-  <div class="container">
-    <section class="hero">
-      <img src="assets/promo.jpg" alt="Promoción" />
-      <div class="meta">
-        <div>
-          <div class="pill">Lotería de Supergana • 13 Oct 2025</div>
-          <div class="title">Sorteo US$ 10.000</div>
-          <div class="sub">Tickets a Bs. <b id="price">489</b></div>
-        </div>
-        <div class="price">Bs. <span id="total">489</span></div>
-      </div>
-    </section>
+  function showErr(msg){
+    err.textContent = msg;
+    err.style.display = "block";
+  }
+  function clearErr(){ err.style.display="none"; err.textContent=""; }
+  function closeModal(){ overlay.classList.remove("show"); window.scrollTo({top:0,behavior:"smooth"}); }
 
-    <div class="grid">
-      <div class="card">
-        <h3>1) Datos del beneficiario</h3>
-        <div class="row">
-          <label>Monto exacto</label>
-          <input value="Bs. 489" disabled />
-        </div>
-        <div class="row">
-          <label>Banco</label>
-          <input value="Banco Provincial" disabled />
-        </div>
-        <div class="row">
-          <label>Teléfono</label>
-          <input value="04244150022" disabled />
-        </div>
-        <div class="row">
-          <label>Cédula</label>
-          <input value="15857050" disabled />
-        </div>
-        <div class="hint">Haz el Pago Móvil por el monto exacto y guarda el comprobante.</div>
-      </div>
+  // Fecha/hora
+  (function(){
+    const d = new Date();
+    const yyyy=d.getFullYear(), mm=String(d.getMonth()+1).padStart(2,"0"), dd=String(d.getDate()).padStart(2,"0");
+    $("#date").value = `${yyyy}-${mm}-${dd}`;
+    $("#hh").value = String(d.getHours()).padStart(2,"0");
+    $("#mm").value = String(d.getMinutes()).padStart(2,"0");
+    $("#total").textContent = PRICE_BS;
+    $("#price").textContent = PRICE_BS;
+  })();
 
-      <div class="card">
-        <h3>2) Sube tu comprobante</h3>
-        <div class="row">
-          <label>Archivo (JPG/PNG/HEIC – máx. 5 MB)</label>
-          <input id="file" type="file" accept=".jpg,.jpeg,.png,.heic,image/*" />
-        </div>
-        <h3 style="margin-top:18px">3) Reporta tu pago</h3>
-        <div class="row">
-          <label>Banco emisor</label>
-          <select id="bank">
-            <option>Banco de Venezuela</option>
-            <option>Banco Provincial</option>
-            <option>Mercantil</option>
-            <option>Banco Nacional de Crédito</option>
-            <option>BanCaribe</option>
-          </select>
-        </div>
-        <div class="row">
-          <label>Cédula (solo números)</label>
-          <input id="ci" inputmode="numeric" pattern="[0-9]*" placeholder="Ej: 15857060" />
-        </div>
-        <div class="row">
-          <label>Teléfono</label>
-          <input id="tlf" inputmode="numeric" placeholder="Ej: 0412xxxxxxx" />
-        </div>
-        <div class="row">
-          <label>Últimos 6 de la referencia</label>
-          <input id="ref6" maxlength="6" inputmode="numeric" placeholder="Ej: 358412" />
-        </div>
-        <div class="row">
-          <label>Fecha del pago</label>
-          <input id="date" type="date" />
-        </div>
-        <div class="row">
-          <label>Hora del pago</label>
-          <div style="display:flex;gap:10px">
-            <input id="hh" style="max-width:90px" inputmode="numeric" placeholder="HH" />
-            <input id="mm" style="max-width:90px" inputmode="numeric" placeholder="MM" />
-          </div>
-        </div>
+  // Anti-doble click (20s)
+  const SUBMIT_WINDOW_S = 20;
+  function canSubmit(){
+    const k="lastSubmitAt";
+    const now=Date.now();
+    const last=Number(localStorage.getItem(k)||0);
+    if(now-last < SUBMIT_WINDOW_S*1000) return false;
+    localStorage.setItem(k,String(now));
+    return true;
+  }
 
-        <div class="actions">
-          <button id="payBtn" class="btn btn-primary">Confirmar y obtener números ahora</button>
-        </div>
-        <div id="err" class="error" style="display:none;margin-top:10px"></div>
-        <div class="hint" style="margin-top:10px">Asignación inmediata. Si el pago no coincide, el administrador puede liberar tus números.</div>
-      </div>
-    </div>
-  </div>
+  async function submitOrder(){
+    clearErr();
+    if(!canSubmit()){ showErr("Ya estamos procesando tu pago. Espera unos segundos…"); return; }
 
-  <!-- Modal de éxito -->
-  <div id="overlay" class="overlay" role="dialog" aria-modal="true">
-    <div class="modal">
-      <div class="head">
-        <div style="font-weight:800">Compra aprobada 🎉</div>
-        <button class="btn btn-muted" onclick="closeModal()">Cerrar</button>
-      </div>
-      <div class="body">
-        <p class="ok">¡Listo, números asignados!</p>
-        <p class="small muted">Haz captura y consérvala. También te llegará un correo con tu comprobante.</p>
-        <div id="nums" class="numbers" style="margin:14px 0 18px"></div>
-        <div class="center">
-          <button class="btn btn-primary" onclick="closeModal()">Ir al inicio</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    const file = $("#file").files[0] || null;
+    const bank = $("#bank").value?.trim();
+    const ci   = $("#ci").value?.trim();
+    const tlf  = $("#tlf").value?.trim();
+    const ref6 = $("#ref6").value?.trim();
+    const date = $("#date").value?.trim();
+    const hh   = $("#hh").value?.trim();
+    const mm   = $("#mm").value?.trim();
 
-  <script>
-    // ================== CONFIG ==================
-    const API = "https://script.google.com/macros/s/AKfycbyfe88_IsXQIXl3bZ5Rnh9u8bHCkAUCKny913UlWngl8hBdQKGRE1XG2_85gxw37w0/exec";
-    const RAFFLE_ID = "raffle-001";
-    const PRICE_BS = 489;
+    if(!file){ showErr("Debes subir el comprobante (JPG/PNG/HEIC, máx. 5 MB)."); return; }
+    if(!/^\d{6}$/.test(ref6)){ showErr("Los últimos 6 dígitos de la referencia no son válidos."); return; }
+    if(!/^\d{6,10}$/.test(ci)){ showErr("La cédula debe ser numérica (6-10 dígitos)."); return; }
+    if(!/^\d{10,12}$/.test(tlf)){ showErr("El teléfono debe ser numérico (10-12 dígitos)."); return; }
+    if(!/^\d{2}$/.test(hh) || !/^\d{2}$/.test(mm)){ showErr("Hora inválida. Usa HH y MM."); return; }
 
-    // ============== Helpers UI ==================
-    const $ = (s)=>document.querySelector(s);
-    const err = $("#err");
-    const btn = $("#payBtn");
-    const overlay = $("#overlay");
-    const numsBox = $("#nums");
+    btn.disabled = true; btn.textContent = "Procesando…";
 
-    function showErr(msg){
-      err.textContent = msg;
-      err.style.display = "block";
-    }
-    function clearErr(){ err.style.display="none"; err.textContent=""; }
-    function closeModal(){
-      overlay.classList.remove("show");
-      window.scrollTo({top:0,behavior:"smooth"});
-    }
+    try{
+      const fd = new FormData();
+      fd.append("action","createOrder");
+      fd.append("raffleId", RAFFLE_ID);
+      fd.append("priceBs", String(PRICE_BS));
+      fd.append("bank", bank);
+      fd.append("ci", ci);
+      fd.append("tlf", tlf);
+      fd.append("ref6", ref6);
+      fd.append("date", date);
+      fd.append("time", `${hh}:${mm}`);
+      fd.append("file", file, file.name);
 
-    // Prefija fecha/hora actual
-    (function presetDateTime(){
-      const d = new Date();
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth()+1).padStart(2,"0");
-      const dd = String(d.getDate()).padStart(2,"0");
-      $("#date").value = `${yyyy}-${mm}-${dd}`;
-      $("#hh").value = String(d.getHours()).padStart(2,"0");
-      $("#mm").value = String(d.getMinutes()).padStart(2,"0");
-      $("#total").textContent = PRICE_BS.toString();
-      $("#price").textContent = PRICE_BS.toString();
-    })();
+      const res = await fetch(`${API}?t=${Date.now()}`, { method:"POST", body:fd });
+      let bodyText = "";
+      try{ bodyText = await res.text(); }catch(e){ /* ignore */ }
 
-    // Anti doble envío (1 cada 20s)
-    const SUBMIT_WINDOW_S = 20;
-    function canSubmit(){
-      const k="lastSubmitAt";
-      const now=Date.now();
-      const last = Number(localStorage.getItem(k)||0);
-      if(now - last < SUBMIT_WINDOW_S*1000) return false;
-      localStorage.setItem(k, String(now));
-      return true;
-    }
-
-    async function submitOrder(){
-      clearErr();
-
-      if (!canSubmit()){
-        showErr("Ya estamos procesando tu pago. Espera unos segundos…");
-        return;
+      if(!res.ok){
+        console.error("Apps Script error:", res.status, res.statusText, bodyText);
+        throw new Error(`Servidor respondió ${res.status}. ${bodyText || "Intenta de nuevo."}`);
       }
 
-      const file = $("#file").files[0] || null;
-      const bank = $("#bank").value?.trim();
-      const ci   = $("#ci").value?.trim();
-      const tlf  = $("#tlf").value?.trim();
-      const ref6 = $("#ref6").value?.trim();
-      const date = $("#date").value?.trim();
-      const hh   = $("#hh").value?.trim();
-      const mm   = $("#mm").value?.trim();
-
-      // Validaciones simples
-      if(!file){ showErr("Debes subir el comprobante (JPG/PNG/HEIC, máx. 5 MB)."); return; }
-      if(!/^\d{6}$/.test(ref6)){ showErr("Los últimos 6 dígitos de la referencia no son válidos."); return; }
-      if(!/^\d{6,10}$/.test(ci)){ showErr("La cédula debe ser numérica (6-10 dígitos)."); return; }
-      if(!/^\d{10,12}$/.test(tlf)){ showErr("El teléfono debe ser numérico (10-12 dígitos)."); return; }
-      if(!/^\d{2}$/.test(hh) || !/^\d{2}$/.test(mm)){ showErr("Hora inválida. Usa HH y MM."); return; }
-
-      // Desactivar botón
-      btn.disabled = true; btn.textContent = "Procesando…";
-
-      try{
-        const fd = new FormData();
-        fd.append("action", "createOrder");   // el Apps Script usa esta acción
-        fd.append("raffleId", RAFFLE_ID);
-        fd.append("priceBs", String(PRICE_BS));
-        fd.append("bank", bank);
-        fd.append("ci", ci);
-        fd.append("tlf", tlf);
-        fd.append("ref6", ref6);
-        fd.append("date", date);
-        fd.append("time", `${hh}:${mm}`);
-        fd.append("file", file, file.name);
-
-        const res = await fetch(API, { method:"POST", body: fd });
-        if(!res.ok){
-          throw new Error("No se pudo registrar el pago. Intenta de nuevo.");
-        }
-        const data = await res.json(); // { ok, numbers:[...], ticketId, emailSent, message }
-        if(!data.ok){
-          throw new Error(data.message || "No se pudo registrar el pago.");
-        }
-
-        // Mostrar números asignados
-        numsBox.innerHTML = "";
-        (data.numbers || []).forEach(n=>{
-          const b=document.createElement("div");
-          b.className="badge";
-          b.textContent = String(n).padStart(4,"0");
-          numsBox.appendChild(b);
-        });
-        overlay.classList.add("show");
-
-      }catch(e){
-        showErr(e.message || "Error inesperado. Reintenta.");
-      }finally{
-        btn.disabled=false; btn.textContent="Confirmar y obtener números ahora";
+      let data = {};
+      try{ data = JSON.parse(bodyText); }catch(e){
+        console.error("Respuesta no-JSON:", bodyText);
+        throw new Error("Respuesta del servidor inválida.");
       }
-    }
 
-    $("#payBtn").addEventListener("click", submitOrder);
-  </script>
-</body>
-</html>
+      if(!data.ok){
+        console.error("Apps Script dijo !ok:", data);
+        throw new Error(data.message || "No se pudo registrar el pago.");
+      }
+
+      // Mostrar números
+      numsBox.innerHTML = "";
+      (data.numbers||[]).forEach(n=>{
+        const b=document.createElement("div");
+        b.className="badge";
+        b.textContent = String(n).padStart(4,"0");
+        numsBox.appendChild(b);
+      });
+      overlay.classList.add("show");
+
+    }catch(e){
+      showErr(e.message || "Error inesperado. Reintenta.");
+    }finally{
+      btn.disabled = false; btn.textContent = "Confirmar y obtener números ahora";
+    }
+  }
+
+  $("#payBtn").addEventListener("click", submitOrder);
+  window.closeModal = closeModal;
+</script>
