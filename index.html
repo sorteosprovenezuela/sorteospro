@@ -2,346 +2,359 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Sorteos PRO Venezuela</title>
-  <!-- Favicon inline para evitar 404 -->
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎟️</text></svg>">
-  <meta name="color-scheme" content="dark light" />
-  <link rel="preload" href="assets/promo.jpg" as="image" />
-
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Sorteos Pro Venezuela — Premio Octubre Feliz</title>
+  <meta name="description" content="Participa en Sorteos Pro Venezuela. Premio Octubre Feliz: 10.000$. Fecha: 25 de octubre de 2025." />
   <style>
     :root{
-      --bg:#0c0f12; --card:#12161b; --muted:#8892a6; --text:#e7edf5;
-      --acc:#16a34a; --acc-2:#f59e0b; --danger:#ef4444; --ring:#1f2937;
-      --input:#0f1419; --border:#1f2833;
+      --bg:#0f1220; --card:#11162a; --muted:#9aa3b2; --text:#e9edf2; --brand:#6ee7b7; --brand-2:#22d3ee; --danger:#ef4444; --ok:#22c55e;
+      --radius:14px; --radius-sm:10px; --shadow:0 10px 24px rgba(0,0,0,.35);
     }
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue","Noto Sans",Arial,"Apple Color Emoji","Segoe UI Emoji";}
-
-    .container{max-width:1100px;margin:auto;padding:16px;}
-
-    header{display:flex;justify-content:space-between;align-items:center;padding:12px 0}
-    header img{height:36px}
-    .btn{display:inline-flex;align-items:center;gap:.5rem; padding:.9rem 1.1rem;border:1px solid #2a3542;border-radius:12px;background:#0c1116;color:#e7edf5;cursor:pointer}
-    .btn:hover{background:#0e1319}
-    .btn.primary{background:var(--acc);border-color:var(--acc);color:#08130a}
-    .btn.primary:hover{filter:brightness(1.05)}
-    .btn.warning{background:#1b1306;border-color:#3a2a07;color:#ffdfa6}
-    .btn.inline{padding:.5rem .8rem;border-radius:10px;font-size:.9rem}
-
-    .hero{position:relative;border:1px solid var(--border);border-radius:18px;overflow:hidden;background:#0b0f14}
-    .hero img{width:100%;height:auto;display:block;object-fit:cover;aspect-ratio:16/9}
-    .hero .overlay{position:absolute;inset:auto 0 0 0; padding:14px; display:flex;justify-content:flex-end}
-    .chip{font-size:.85rem;border:1px solid #374151;background:#0f172a;color:#d1d5db;border-radius:12px;padding:.4rem .7rem}
-
-    .grid{display:grid;gap:14px;margin-top:16px}
-    @media(min-width:900px){ .grid{grid-template-columns:1fr 1fr} }
-
-    .card{border:1px solid var(--border);border-radius:16px;background:var(--card);padding:16px}
-    .h1{font-size:1.6rem;margin:0 0 .5rem}
+    html,body{margin:0;padding:0;background:radial-gradient(1200px 800px at 70% -10%, #1b2342 0%, #0f1220 55%), var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif}
+    a{color:inherit}
+    .wrap{max-width:960px;margin-inline:auto;padding:16px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:10px}
+    .logo{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--brand),var(--brand-2))}
+    .title{font-weight:700;font-size:18px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);box-shadow:var(--shadow)}
+    .hero{padding:22px;border-radius:var(--radius);display:grid;gap:16px}
+    .hero h1{font-size:28px;line-height:1.15;margin:0}
+    .hero p{margin:0;color:var(--muted)}
+    .row{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:720px){.row{grid-template-columns:1fr 1fr}}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:100px;background:rgba(255,255,255,.06);color:#d9ffef;border:1px solid rgba(110,231,183,.35)}
     .muted{color:var(--muted)}
-    .price{font-weight:700;color:#a7f3d0}
-
-    .row{display:flex;gap:10px;align-items:center}
-    .row .btn{flex:1}
-
-    /* ===== Modal ===== */
-    dialog{border:none;border-radius:18px;max-width:920px;width:calc(100% - 20px);background:var(--card);color:var(--text);padding:0}
-    dialog::backdrop{background:rgba(0,0,0,.55)}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)}
-    .modal-title{font-weight:700}
-    .modal-body{padding:16px}
-    .grid-3{display:grid;gap:12px}
-    @media(min-width:1000px){ .grid-3{grid-template-columns:400px 1fr} }
-
-    .box{border:1px solid var(--border);border-radius:14px;padding:14px;background:#0c1116}
-    .box h3{margin:0 0 8px;font-size:1rem}
-    .field{display:flex;flex-direction:column;gap:6px;margin:8px 0}
-    .field label{font-size:.86rem;color:var(--muted)}
-    .input,
-    select{border:1px solid #253140;background:var(--input);color:var(--text);padding:.8rem;border-radius:12px;outline:none}
-    .input:focus, select:focus{border-color:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,.15)}
-    input[type="file"]{background:transparent}
-    .help{font-size:.8rem;color:var(--muted)}
-
-    .footer-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
-    .err{display:none;margin-top:10px;border:1px solid #3c0d0d;background:#180707;color:#ffb4b4;padding:.8rem .9rem;border-radius:12px}
-
-    /* Resultado asignación */
-    .result-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;padding:12px;z-index:60}
-    .result-card{max-width:720px;width:100%;background:#0c1116;border:1px solid var(--border);border-radius:18px;padding:16px}
-    .badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-    .badge{background:#0e1b0f;border:1px solid #1f3c22;color:#a7f3d0;border-radius:12px;padding:.5rem .7rem;font-weight:700}
-
-    .hide{display:none !important}
+    .btn{cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 18px;border-radius:12px;border:1px solid transparent;background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#0b1220;font-weight:700}
+    .btn.secondary{background:transparent;border-color:rgba(255,255,255,.12);color:var(--text)}
+    .btn.full{width:100%}
+    .btn:disabled{opacity:.6;cursor:not-allowed}
+    .stepper{display:flex;gap:12px;flex-wrap:wrap}
+    .step{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:100px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03)}
+    .step.active{border-color:rgba(110,231,183,.5);background:rgba(110,231,183,.07)}
+    .copy{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.12);cursor:pointer}
+    .grid{display:grid;gap:12px}
+    .payline{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px dashed rgba(255,255,255,.18);border-radius:12px;padding:10px}
+    label{display:block;margin:6px 0 6px 4px;color:#cfd6e3;font-size:14px}
+    input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--text)}
+    input::placeholder,textarea::placeholder{color:#a7b0c0}
+    .section{padding:16px}
+    .hidden{display:none}
+    .success{display:grid;place-items:center;text-align:center;gap:14px;padding:22px}
+    .numbers{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    .num{padding:8px 10px;border-radius:8px;background:#0c182c;border:1px solid rgba(255,255,255,.12)}
+    .warn{padding:12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);color:#c9e4ff}
+    footer{margin:36px 0 24px;color:var(--muted);font-size:13px}
+    .mini{font-size:12px;color:#b7bfd0}
+    .toast{position:fixed;inset:auto 16px 16px auto;background:#1e293b;color:#fff;padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.12);opacity:0;transform:translateY(10px);transition:.25s}
+    .toast.show{opacity:1;transform:translateY(0)}
+    canvas#confetti{position:fixed;inset:0;pointer-events:none}
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <div class="row" style="gap:10px">
-        <img src="assets/logo.png" alt="Sorteos PRO" />
-        <span class="muted">Sorteos PRO Venezuela</span>
+<canvas id="confetti"></canvas>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <div class="title">Sorteos Pro Venezuela</div>
+        <div class="mini">Premio Octubre Feliz · Sortea el 25/oct/2025</div>
       </div>
-      <a class="btn inline" href="https://t.me/+58XXXXXXXXXX" target="_blank" rel="noopener">Telegram</a>
-    </header>
-
-    <section class="hero">
-      <img src="assets/promo.jpg" alt="Promoción" decoding="async" />
-      <div class="overlay">
-        <span class="chip">Lotería de Supergana • 13 Oct 2025</span>
-      </div>
-    </section>
-
-    <section class="grid">
-      <div class="card">
-        <h1 class="h1">Sorteo <span class="price">US$ 10.000</span></h1>
-        <p class="muted">Tickets a <strong>Bs. 489</strong></p>
-
-        <div class="row" style="margin-top:12px">
-          <button id="btn1" class="btn">1</button>
-          <button id="btn2" class="btn">2</button>
-          <button id="btn10" class="btn">10</button>
-          <button id="btn25" class="btn">25</button>
-        </div>
-
-        <p class="muted" style="margin-top:10px">Total a pagar: <strong>Bs. <span id="total">489</span></strong></p>
-
-        <div class="row" style="margin-top:10px">
-          <button id="participar" class="btn primary" style="font-size:1rem">Participar</button>
-          <a class="btn warning" href="https://wa.me/584244150022" target="_blank" rel="noopener">WhatsApp soporte</a>
-        </div>
-
-        <p class="help" style="margin-top:10px">Al continuar, verás los datos del Pago Móvil, subirás tu captura y recibirás <em>al instante</em> tus números aleatorios. Si el pago no coincide, el administrador puede liberarlos.</p>
-      </div>
-
-      <div class="card">
-        <h2 class="h1" style="font-size:1.2rem">Detalles del sorteo</h2>
-        <ul class="muted" style="line-height:1.7;margin:0;padding-left:16px">
-          <li>Fecha del sorteo: <strong>13/10/2025</strong></li>
-          <li>Premio: <strong>US$ 10.000</strong></li>
-          <li>Números disponibles: 0000–9999</li>
-          <li>Asignación automática al reportar tu pago</li>
-        </ul>
-      </div>
-    </section>
-  </div>
-
-  <!-- ============ MODAL ============ -->
-  <dialog id="modal">
-    <div class="modal-header">
-      <div class="modal-title">Pago Móvil</div>
-      <button class="btn inline" onclick="closeModal()">Cerrar</button>
     </div>
+    <button class="btn" id="btnParticiparTop">Participar</button>
+  </header>
 
-    <div class="modal-body grid-3">
-      <!-- Columna izquierda: Beneficiario -->
-      <div class="box">
-        <h3>1) Datos del beneficiario</h3>
-        <div class="field"><label>Monto exacto</label><div class="input" id="priceBox">Bs. <span id="price">489</span></div></div>
-        <div class="field"><label>Banco</label><div class="input">Banco Provincial</div></div>
-        <div class="field"><label>Teléfono</label><div class="input">04244150022</div></div>
-        <div class="field"><label>Cédula</label><div class="input">15857050</div></div>
-        <p class="help">Haz el Pago Móvil por el monto exacto y guarda el comprobante.</p>
-      </div>
-
-      <!-- Columna derecha: Comprobante + Datos del pagador -->
-      <div class="box">
-        <h3>2) Sube tu comprobante</h3>
-        <div class="field">
-          <label>Archivo (JPG/PNG/HEIC, máx. 5 MB)</label>
-          <input class="input" type="file" id="file" accept=".jpg,.jpeg,.png,.heic,image/*" />
-          <p class="help">Arrastra o selecciona el archivo del comprobante.</p>
+  <section class="hero card">
+    <div class="row">
+      <div>
+        <h1>Premio Octubre Feliz: <span class="pill">$10.000</span></h1>
+        <p class="muted">Fecha del sorteo: <strong>25 de octubre de 2025</strong>.</p>
+        <p class="muted">Boletos disponibles: <strong>10.000</strong>. Entrega <strong>aleatoria</strong> al reportar tu pago móvil.</p>
+        <div class="stepper" style="margin-top:10px">
+          <div class="step active" id="s1"><b>1</b> Datos</div>
+          <div class="step" id="s2"><b>2</b> Pago móvil</div>
+          <div class="step" id="s3"><b>3</b> Captura & envío</div>
         </div>
+        <div style="margin-top:12px"><button class="btn" id="btnParticipar">Participar ahora</button></div>
+      </div>
+      <div class="section">
+        <div class="warn">
+          <b>Importante:</b> luego de pagar, <u>sube tu captura</u>, deja tus datos y recibirás tus números <b>al azar</b>. Te mostraremos un comprobante para que <b>tomes captura</b>.
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <h3 style="margin-top:10px">3) Reporta tu pago</h3>
-
-        <div class="field">
-          <label>Banco emisor</label>
-          <select id="bank" class="input">
-            <option>Banco de Venezuela</option>
-            <option>Banco Provincial</option>
-            <option>Banco Mercantil</option>
-            <option>Banco Banesco</option>
-            <option>Otro</option>
+  <!-- Paso 1: Datos del participante -->
+  <section class="card section" id="step1">
+    <h2 style="margin:0 0 8px">1) Tus datos</h2>
+    <div class="grid">
+      <div>
+        <label>Nombre y apellido</label>
+        <input id="fullName" placeholder="Ej: María Pérez" autocomplete="name" required />
+      </div>
+      <div class="row">
+        <div>
+          <label>Tipo de documento</label>
+          <select id="docType">
+            <option>V</option><option>E</option><option>J</option><option>P</option><option>G</option>
           </select>
         </div>
-
-        <div class="field">
-          <label>Cédula (solo números)</label>
-          <input id="ci" class="input" inputmode="numeric" placeholder="Ej: 15857060" />
+        <div>
+          <label>Número de documento</label>
+          <input id="docNumber" inputmode="numeric" placeholder="Ej: 12345678" required />
         </div>
-
-        <div class="field">
+      </div>
+      <div class="row">
+        <div>
           <label>Teléfono</label>
-          <input id="tlf" class="input" inputmode="numeric" placeholder="Ej: 04125093287" />
+          <input id="phone" inputmode="tel" placeholder="Ej: 0412-1234567" required />
         </div>
-
-        <div class="field">
-          <label>Últimos 6 de la referencia</label>
-          <input id="ref6" class="input" inputmode="numeric" maxlength="6" placeholder="Ej: 358412" />
+        <div>
+          <label>Correo electrónico</label>
+          <input id="email" type="email" placeholder="tu@correo.com" required />
         </div>
-
-        <div class="field">
-          <label>Fecha del pago</label>
-          <input id="date" class="input" type="date" />
+      </div>
+      <div class="row">
+        <div>
+          <label>Cantidad de números a comprar</label>
+          <input id="qty" type="number" min="1" max="100" value="1" required />
         </div>
+        <div class="mini" style="align-self:end">Los números se asignan de <b>forma aleatoria</b> de un conjunto de 10.000.</div>
+      </div>
+      <div><button class="btn full" id="goStep2">Continuar</button></div>
+    </div>
+  </section>
 
-        <div class="field">
-          <label>Hora del pago</label>
-          <div style="display:flex;gap:8px">
-            <input id="hh" class="input" inputmode="numeric" maxlength="2" placeholder="HH" style="width:90px" />
-            <input id="mm" class="input" inputmode="numeric" maxlength="2" placeholder="MM" style="width:90px" />
+  <!-- Paso 2: Pago móvil -->
+  <section class="card section hidden" id="step2">
+    <h2 style="margin:0 0 8px">2) Realiza el pago móvil</h2>
+    <p class="muted">Copia estos datos en tu banco, realiza el pago y pasa al siguiente paso para reportarlo.</p>
+    <div class="grid">
+      <div class="payline"><div><b>Banco</b><br>Provincial (0108)</div><button class="copy" data-copy="Provincial (0108)">Copiar</button></div>
+      <div class="payline"><div><b>RIF/Cédula</b><br>15.857.050</div><button class="copy" data-copy="15857050">Copiar</button></div>
+      <div class="payline"><div><b>Teléfono</b><br>0424-4150022</div><button class="copy" data-copy="04244150022">Copiar</button></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn secondary" id="back1">Volver</button>
+      <button class="btn" id="goStep3">Ya pagué, reportar</button>
+    </div>
+    <p class="mini" style="margin-top:8px">Tip: muchas plataformas piden el <b>número de referencia (6 dígitos)</b>. Aquí te lo pediremos en el siguiente paso. </p>
+  </section>
+
+  <!-- Paso 3: Reporte + Captura -->
+  <section class="card section hidden" id="step3">
+    <h2 style="margin:0 0 8px">3) Sube tu captura y datos del pago</h2>
+    <div class="grid">
+      <div class="row">
+        <div>
+          <label>Monto pagado (Bs. o $)</label>
+          <input id="amount" inputmode="decimal" placeholder="Ej: 479,00" required />
+        </div>
+        <div>
+          <label>Número de referencia (6 dígitos)</label>
+          <input id="ref6" inputmode="numeric" maxlength="6" placeholder="Ej: 123456" required />
+        </div>
+      </div>
+      <div>
+        <label>Banco emisor (desde el que pagaste)</label>
+        <select id="bankEmitter">
+          <option>(0108) BBVA PROVINCIAL</option>
+          <option>(0102) BANCO DE VENEZUELA</option>
+          <option>(0105) MERCANTIL</option>
+          <option>(0191) BNC</option>
+          <option>(0134) BANESCO</option>
+          <option>(0114) BANCARIBE</option>
+          <option>(0172) BANCAMIGA</option>
+          <option>(0163) BANCO DEL TESORO</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="row">
+        <div>
+          <label>Documento del pagador</label>
+          <div class="row">
+            <select id="payerDocType">
+              <option>V</option><option>E</option><option>J</option><option>P</option><option>G</option>
+            </select>
+            <input id="payerDocNumber" inputmode="numeric" placeholder="N° documento" />
           </div>
         </div>
-
-        <div id="err" class="err"></div>
-
-        <div class="footer-actions">
-          <button id="payBtn" class="btn primary">Confirmar y obtener números ahora</button>
+        <div>
+          <label>Teléfono del pagador</label>
+          <input id="payerPhone" inputmode="tel" placeholder="Ej: 0414-0000000" />
         </div>
-        <p class="help">Asignación inmediata. Si el pago no coincide, el administrador puede liberar los números.</p>
       </div>
+      <div>
+        <label>Fecha/Hora del pago</label>
+        <input id="paidAt" type="datetime-local" />
+      </div>
+      <div>
+        <label>Sube la <b>captura del pago</b></label>
+        <input id="receipt" type="file" accept="image/*,application/pdf" required />
+        <p class="mini">Acepta imagen o PDF. Ideal: captura nítida donde se vea el monto, referencia y fecha.</p>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="btn secondary" id="back2">Volver</button>
+        <button class="btn" id="submitAll">Enviar y obtener mis números</button>
+      </div>
+      <div id="status" class="mini"></div>
     </div>
-  </dialog>
+  </section>
 
-  <!-- ============ RESULTADO ============ -->
-  <div id="overlay" class="result-overlay">
-    <div class="result-card">
-      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-        <h3 style="margin:0">¡Listo, números asignados 🎉!</h3>
-        <button class="btn inline" onclick="closeModal()">Cerrar</button>
-      </div>
-      <p class="help">Haz captura y consérvala.</p>
-      <div id="nums" class="badges"></div>
-      <div class="footer-actions" style="margin-top:12px">
-        <button class="btn" onclick="navigator.clipboard.writeText(document.getElementById('nums').innerText)">Copiar</button>
-        <button class="btn primary" onclick="closeModal()">Volver al inicio</button>
-      </div>
+  <!-- Éxito -->
+  <section class="card section hidden" id="success">
+    <div class="success">
+      <h2>🎉 ¡Compra registrada!</h2>
+      <p>Te asignamos <b>tus números</b> de forma aleatoria.<br>✨ <b>Toma captura</b> de esta pantalla para conservarla.</p>
+      <div id="assignedBox" class="numbers"></div>
+      <div class="warn">También enviamos un aviso a <b>sorteosprovenezuela@gmail.com</b> para revisión. Una vez <b>aprobada</b>, tus números quedan fijos. Si se <b>rechaza</b>, se liberan y pueden reasignarse.</div>
+      <button class="btn" id="copyReceipt">Copiar comprobante</button>
+      <a class="btn secondary" href="#" onclick="location.reload()">Ir al inicio</a>
     </div>
-  </div>
+  </section>
 
-  <script>
-    /* ================== CONFIG ================== */
-    // 👉 Si despliegas otra versión del Apps Script, cambia esta URL por la nueva que termine en /exec
-    const API = "https://script.google.com/macros/s/AKfycbyfe88_IsXQIXl3bZ5Rnh9u8bHCkAUCKny913UlWngl8hBdQKGRE1XG2_85gxw37w0/exec";
-    const RAFFLE_ID = "raffle-001";
-    const PRICE_BS  = 489;
+  <footer class="wrap">
+    <div class="mini">Sorteos Pro Venezuela — Premio Octubre Feliz: $10.000 — Sorteo: 25/oct/2025</div>
+    <div class="mini">Al participar aceptas Términos y Política de Privacidad. Conserva tu captura.</div>
+  </footer>
+</div>
 
-    const modal = document.getElementById("modal");
-    const overlay = document.getElementById("overlay");
-    const numsBox = document.getElementById("nums");
-    const errBox  = document.getElementById("err");
-    const btnPay  = document.getElementById("payBtn");
+<div id="toast" class="toast" role="status" aria-live="polite">Copiado</div>
 
-    // Cantidades rápidas
-    const totalEl = document.getElementById("total");
-    const priceEl = document.getElementById("price");
-    document.getElementById("btn1").onclick  = ()=>{ totalEl.textContent = PRICE_BS; };
-    document.getElementById("btn2").onclick  = ()=>{ totalEl.textContent = PRICE_BS*2; };
-    document.getElementById("btn10").onclick = ()=>{ totalEl.textContent = PRICE_BS*10; };
-    document.getElementById("btn25").onclick = ()=>{ totalEl.textContent = PRICE_BS*25; };
-    document.getElementById("participar").onclick = ()=>{ modal.showModal(); };
+<script>
+  // === CONFIG ===
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyw1eIHuZESpAnQVoWQeFXI2JKPDUXhlUPSxSuxurEys9zQirbT5PmLu8WcyTiDxVGFQA/exec";
 
-    // Fecha/hora por defecto + precio
-    (function initDate(){
-      const d=new Date();
-      const yyyy=d.getFullYear(),mm=String(d.getMonth()+1).padStart(2,"0"),dd=String(d.getDate()).padStart(2,"0");
-      document.getElementById("date").value=`${yyyy}-${mm}-${dd}`;
-      document.getElementById("hh").value=String(d.getHours()).padStart(2,"0");
-      document.getElementById("mm").value=String(d.getMinutes()).padStart(2,"0");
-      totalEl.textContent = PRICE_BS;
-      priceEl.textContent = PRICE_BS;
-    })();
+  // === UI helpers ===
+  const $ = s => document.querySelector(s);
+  const show = (id) => document.getElementById(id).classList.remove('hidden');
+  const hide = (id) => document.getElementById(id).classList.add('hidden');
+  const toast = (msg="Copiado") => { const t=$("#toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1500); };
+  const setActive = (n)=>{ ["s1","s2","s3"].forEach((id,i)=>document.getElementById(id).classList.toggle("active", i===n-1)); };
 
-    function showErr(m){ errBox.textContent=m; errBox.style.display="block"; }
-    function clearErr(){ errBox.textContent=""; errBox.style.display="none"; }
-    function closeModal(){
-      modal.close();
-      overlay.style.display="none";
+  // === Navegación pasos ===
+  $("#btnParticipar").onclick = $("#btnParticiparTop").onclick = ()=>{ window.scrollTo({top:document.body.offsetTop,behavior:"smooth"}); };
+  $("#goStep2").onclick = () => { hide("step1"); show("step2"); setActive(2); window.scrollTo({top:0,behavior:"smooth"}); };
+  $("#back1").onclick  = () => { hide("step2"); show("step1"); setActive(1); };
+  $("#goStep3").onclick = () => { hide("step2"); show("step3"); setActive(3); window.scrollTo({top:0,behavior:"smooth"}); };
+  $("#back2").onclick  = () => { hide("step3"); show("step2"); setActive(2); };
+
+  // === Copiar datos de pago ===
+  document.querySelectorAll(".copy").forEach(btn=>{
+    btn.addEventListener("click", async ()=>{
+      try{ await navigator.clipboard.writeText(btn.dataset.copy); toast("Copiado"); }catch(e){ toast("No se pudo copiar"); }
+    });
+  });
+
+  // === Envío final ===
+  $("#submitAll").onclick = async ()=>{
+    const fullName = $("#fullName").value.trim();
+    const docType = $("#docType").value;
+    const docNumber = $("#docNumber").value.trim();
+    const phone = $("#phone").value.trim();
+    const email = $("#email").value.trim();
+    const qty = Math.min(Math.max(parseInt($("#qty").value||"1",10),1),100);
+
+    const amount = $("#amount").value.trim();
+    const ref6 = $("#ref6").value.trim();
+    const bankEmitter = $("#bankEmitter").value;
+    const payerDocType = $("#payerDocType").value;
+    const payerDocNumber = $("#payerDocNumber").value.trim();
+    const payerPhone = $("#payerPhone").value.trim();
+    const paidAt = $("#paidAt").value;
+    const file = $("#receipt").files[0];
+
+    if(!fullName || !docNumber || !phone || !email || !amount || !ref6 || !file){
+      $("#status").textContent = "Por favor completa los campos requeridos.";
+      return;
+    }
+
+    $("#submitAll").disabled = true;
+    $("#status").textContent = "Subiendo captura y registrando compra…";
+
+    try{
+      const file64 = await fileToBase64(file); // data URL
+      const payload = {
+        action:"submitPurchase",
+        participant:{fullName, docType, docNumber, phone, email},
+        quantity: qty,
+        payment:{ amount, ref6, bankEmitter, payerDocType, payerDocNumber, payerPhone, paidAt },
+        file:{ fileName:file.name, mimeType:file.type, base64:file64 },
+        meta:{ userAgent:navigator.userAgent }
+      };
+
+      const body = "payload=" + encodeURIComponent(JSON.stringify(payload));
+      const res = await fetch(SCRIPT_URL, {
+        method:"POST",
+        headers:{ "Content-Type":"application/x-www-form-urlencoded" },
+        body
+      });
+      const json = await res.json();
+
+      if(!json.ok){ throw new Error(json.error || "Error de servidor"); }
+
+      // Mostrar éxito
+      const assigned = json.assignedNumbers || [];
+      const box = $("#assignedBox"); box.innerHTML = "";
+      assigned.forEach(n=>{
+        const span = document.createElement("span"); span.className="num"; span.textContent = ("00000"+n).slice(-5);
+        box.appendChild(span);
+      });
+
+      const receiptText = [
+        "Sorteos Pro Venezuela — Compra registrada",
+        "Participante: " + fullName + " — CI: " + docType + "-" + docNumber,
+        "Tel: " + phone + " — Email: " + email,
+        "Cantidad: " + qty + " — Números: " + assigned.join(", "),
+        "Pago: " + amount + " — Ref: " + ref6 + " — Banco emisor: " + bankEmitter,
+        "Fecha pago: " + (paidAt||""),
+        "ID de compra: " + (json.purchaseId||"")
+      ].join("\n");
+
+      $("#copyReceipt").onclick = async ()=>{ try{ await navigator.clipboard.writeText(receiptText); toast("Comprobante copiado"); }catch{} };
+
+      hide("step3"); show("success"); setActive(3);
+      confetti();
       window.scrollTo({top:0,behavior:"smooth"});
+
+    }catch(err){
+      console.error(err);
+      $("#status").textContent = "Hubo un problema: " + err.message;
+      $("#submitAll").disabled = false;
     }
-    window.closeModal = closeModal;
+  };
 
-    // Anti-doble envío (20s)
-    const SUBMIT_WINDOW_S = 20;
-    function canSubmit(){
-      const k="lastSubmitAt";
-      const now=Date.now();
-      const last=Number(localStorage.getItem(k)||0);
-      if(now-last < SUBMIT_WINDOW_S*1000) return false;
-      localStorage.setItem(k,String(now));
-      return true;
-    }
+  function fileToBase64(file){
+    return new Promise((resolve,reject)=>{
+      const r = new FileReader();
+      r.onload = ()=> resolve(r.result);
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
 
-    async function submitOrder(){
-      clearErr();
-      if(!canSubmit()){ showErr("Ya estamos procesando tu pago. Espera unos segundos…"); return; }
-
-      const file = document.getElementById("file").files[0] || null;
-      const bank = document.getElementById("bank").value.trim();
-      const ci   = document.getElementById("ci").value.trim();
-      const tlf  = document.getElementById("tlf").value.trim();
-      const ref6 = document.getElementById("ref6").value.trim();
-      const date = document.getElementById("date").value.trim();
-      const hh   = document.getElementById("hh").value.trim();
-      const mm   = document.getElementById("mm").value.trim();
-
-      if(!file){ showErr("Debes subir el comprobante (JPG/PNG/HEIC, máx. 5 MB)."); return; }
-      if(!/^\d{6}$/.test(ref6)){ showErr("Los últimos 6 dígitos de la referencia no son válidos."); return; }
-      if(!/^\d{6,10}$/.test(ci)){ showErr("La cédula debe ser numérica (6-10 dígitos)."); return; }
-      if(!/^\d{10,12}$/.test(tlf)){ showErr("El teléfono debe ser numérico (10-12 dígitos)."); return; }
-      if(!/^\d{2}$/.test(hh)||!/^\d{2}$/.test(mm)){ showErr("Hora inválida. Usa HH y MM."); return; }
-
-      btnPay.disabled = true; btnPay.textContent = "Procesando…";
-
-      try{
-        const fd = new FormData();
-        fd.append("action","createOrder");
-        fd.append("raffleId", RAFFLE_ID);
-        fd.append("priceBs", String(PRICE_BS));
-        fd.append("bank", bank);
-        fd.append("ci", ci);
-        fd.append("tlf", tlf);
-        fd.append("ref6", ref6);
-        fd.append("date", date);
-        fd.append("time", `${hh}:${mm}`);
-        fd.append("file", file, file.name);
-
-        const res = await fetch(`${API}?t=${Date.now()}`, { method:"POST", body:fd });
-        const text = await res.text().catch(()=> "");
-        if(!res.ok){
-          console.error("Apps Script error:", res.status, res.statusText, text);
-          throw new Error(`Servidor respondió ${res.status}. ${text||"Intenta de nuevo."}`);
-        }
-        let data={};
-        try{ data = JSON.parse(text); }catch(_){
-          console.error("Respuesta no-JSON:", text);
-          throw new Error("Respuesta del servidor inválida.");
-        }
-        if(!data.ok){
-          console.error("Apps Script dijo !ok:", data);
-          throw new Error(data.message || "No se pudo registrar el pago.");
-        }
-
-        // Mostrar números asignados
-        numsBox.innerHTML="";
-        (data.numbers||[]).forEach(n=>{
-          const b=document.createElement("div");
-          b.className="badge";
-          b.textContent=String(n).padStart(4,"0");
-          numsBox.appendChild(b);
-        });
-        overlay.style.display="flex";
-
-      }catch(e){
-        showErr(e.message || "Error inesperado. Reintenta.");
-      }finally{
-        btnPay.disabled = false; btnPay.textContent = "Confirmar y obtener números ahora";
-      }
-    }
-
-    document.getElementById("payBtn").addEventListener("click", submitOrder);
-  </script>
+  // === Mini confeti ===
+  function confetti(){
+    const cvs = document.getElementById("confetti"), ctx = cvs.getContext("2d");
+    const W = cvs.width = window.innerWidth, H = cvs.height = window.innerHeight;
+    const P = Array.from({length:120},()=>({
+      x:Math.random()*W,y:Math.random()*-H, r:2+Math.random()*4, vy:2+Math.random()*3, vx:(Math.random()-.5)*1.5, a:Math.random()*Math.PI
+    }));
+    let t=0; const loop=()=>{
+      ctx.clearRect(0,0,W,H);
+      P.forEach(p=>{
+        p.y+=p.vy; p.x+=p.vx; p.a+=.1; if(p.y>H){p.y=-10; p.x=Math.random()*W;}
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a);
+        ctx.fillStyle = `hsl(${(p.x+p.y+t)%360} 90% 60%)`;
+        ctx.fillRect(-p.r,-p.r,p.r*2,p.r*2);
+        ctx.restore();
+      });
+      t+=1; if(t<550) requestAnimationFrame(loop); else ctx.clearRect(0,0,W,H);
+    }; loop();
+  }
+</script>
 </body>
 </html>
