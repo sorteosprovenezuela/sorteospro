@@ -1,234 +1,383 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sorteos Pro Venezuela</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Sorteos Pro Venezuela — Premio Octubre Feliz</title>
+  <meta name="description" content="Participa en Sorteos Pro Venezuela. Premio Octubre Feliz: 10.000$. Fecha: 25 de octubre de 2025." />
   <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: #f8fafc;
-      margin: 0;
-      padding: 0;
-      color: #1e293b;
+    :root{
+      --bg:#0b0b0f;          /* negro base */
+      --panel:#111116;       /* negro elevado */
+      --panel-2:#16161c;
+      --text:#ffffff;        /* blanco */
+      --muted:#bfc4cf;
+      --gold:#d4af37;        /* dorado marca */
+      --gold-2:#f2d26b;
+      --line:rgba(255,255,255,.10);
+      --ok:#16a34a;
+      --danger:#dc2626;
+      --radius:16px;
+      --shadow: 0 6px 24px rgba(0,0,0,.35);
     }
-    header {
-      background: #047857;
-      color: #fff;
-      text-align: center;
-      padding: 1.5rem 1rem;
-    }
-    form {
-      background: #fff;
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 2rem;
-      border-radius: 1rem;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #065f46;
-    }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-    }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border: 1px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    input[type="file"] {
-      border: none;
-    }
-    button {
-      background: #16a34a;
-      color: #fff;
-      border: none;
-      padding: 12px;
-      font-size: 1rem;
-      border-radius: 8px;
-      width: 100%;
-      margin-top: 1.5rem;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #15803d;
-    }
-    .success {
-      background: #dcfce7;
-      color: #166534;
-      border-left: 5px solid #16a34a;
-      padding: 1rem;
-      margin-top: 1.5rem;
-      border-radius: 8px;
-    }
-    .error {
-      background: #fee2e2;
-      color: #991b1b;
-      border-left: 5px solid #dc2626;
-      padding: 1rem;
-      margin-top: 1.5rem;
-      border-radius: 8px;
-    }
-    footer {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #64748b;
-      padding: 1rem 0;
-    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Ubuntu,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{max-width:980px;margin-inline:auto;padding:16px}
+    header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand img{width:42px;height:42px;object-fit:contain}
+    .brand-name{font-weight:800;letter-spacing:.2px}
+    .links{display:flex;gap:12px}
+    .chip{display:inline-flex;align-items:center;gap:8px;background:var(--panel-2);border:1px solid var(--line);padding:8px 12px;border-radius:999px;color:var(--muted)}
+    .hero{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden}
+    .hero img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+    .hero-body{padding:14px 14px 18px}
+    .subtitle{color:var(--muted);margin:0;font-size:.95rem}
+    .title{margin:6px 0 0;font-size:1.05rem;font-weight:700}
+    .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+    .meta .pill{display:inline-flex;gap:8px;align-items:center;background:var(--panel-2);border:1px solid var(--line);padding:7px 10px;border-radius:10px;color:var(--muted);font-size:.9rem}
+    .grid{display:grid;gap:12px}
+    .row{display:grid;grid-template-columns:1fr;gap:12px}
+    @media(min-width:760px){.row{grid-template-columns:1.2fr 1fr}}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}
+    .qty-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    @media(min-width:760px){.qty-grid{grid-template-columns:repeat(6,1fr)}}
+    .qty{cursor:pointer;user-select:none;text-align:center;padding:16px 10px;border-radius:14px;background:var(--panel-2);border:1px solid var(--line);transition:transform .05s ease;position:relative}
+    .qty:hover{transform:translateY(-1px)}
+    .qty small{display:block;color:var(--muted);font-size:.75rem;margin-top:4px}
+    .qty.popular::after{content:"Más popular";position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-weight:800;font-size:.68rem;padding:4px 8px;border-radius:999px;border:1px solid #000}
+    .qty.active{outline:2px solid var(--gold);box-shadow:0 0 0 4px rgba(212,175,55,.15) inset}
+    .qty-ctrl{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:6px 8px}
+    .btn-ghost{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--text);font-size:20px;cursor:pointer}
+    .btn-ghost:active{transform:scale(.98)}
+    .qty-input{min-width:60px;text-align:center;font-weight:800;font-size:1rem;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#0f0f14;color:var(--text)}
+    .payline{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px dashed var(--line);border-radius:12px;padding:10px;background:var(--panel-2)}
+    .copy{display:inline-flex;gap:8px;align-items:center;padding:8px 10px;border-radius:10px;border:1px solid var(--line);cursor:pointer;background:#0f0f14}
+    label{display:block;margin:6px 0 6px 4px;color:var(--muted);font-size:.95rem}
+    input,select,textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0f0f14;color:var(--text)}
+    input::placeholder{color:#a7aab6}
+    .btn{cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 18px;border-radius:12px;border:1px solid #000;background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#000;font-weight:900}
+    .btn.full{width:100%}
+    .btn.secondary{background:transparent;border-color:var(--line);color:var(--text)}
+    .muted{color:var(--muted)}
+    .hidden{display:none}
+    .success{display:grid;place-items:center;text-align:center;gap:14px;padding:18px}
+    .numbers{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    .num{padding:8px 10px;border-radius:8px;background:#0f0f14;border:1px solid var(--line)}
+    footer{margin:36px 0 24px;color:var(--muted);font-size:.9rem;text-align:center}
+    .toast{position:fixed;inset:auto 16px 16px auto;background:#0f0f14;color:#fff;padding:10px 12px;border-radius:10px;border:1px solid var(--line);opacity:0;transform:translateY(10px);transition:.25s}
+    .toast.show{opacity:1;transform:translateY(0)}
+    canvas#confetti{position:fixed;inset:0;pointer-events:none}
+    hr.sep{border:none;border-top:1px solid var(--line);margin:12px 0}
   </style>
 </head>
 <body>
+<canvas id="confetti"></canvas>
+
+<div class="wrap">
+  <!-- Header -->
   <header>
-    <h1>🎉 Sorteos Pro Venezuela</h1>
-    <p>Premio Octubre Feliz: <strong>10.000$</strong></p>
-    <p>Fecha del sorteo: <strong>25 de octubre de 2025</strong></p>
+    <div class="brand">
+      <img src="assets/logo.png" alt="Sorteos Pro Venezuela" />
+      <div>
+        <div class="brand-name">Sorteos Pro Venezuela</div>
+        <div class="muted" style="font-size:.85rem">Premio Octubre Feliz · Sortea 25 oct, 2025</div>
+      </div>
+    </div>
+    <div class="links">
+      <div class="chip">🎟 <b>Ticket Bs. 537</b></div>
+      <div class="chip">🎯 10.000 números aleatorios</div>
+    </div>
   </header>
 
-  <form id="purchaseForm">
-    <h2>Participa ahora</h2>
-    <label>Nombre completo</label>
-    <input type="text" id="fullName" required />
+  <!-- Hero -->
+  <section class="hero">
+    <img src="assets/promo.jpg" alt="Imagen del sorteo" />
+    <div class="hero-body">
+      <p class="subtitle">COMBO SOLUCIÓN #56 · 1er premio $10.000 · 2do $1.000 · 3ro $1.000</p>
+      <h1 class="title">Participa ahora</h1>
+      <div class="meta">
+        <div class="pill">📅 25 de Octubre de 2025</div>
+        <div class="pill">🎫 Ticket Bs. 537</div>
+      </div>
+    </div>
+  </section>
 
-    <label>Tipo de documento</label>
-    <select id="docType">
-      <option value="V">V</option>
-      <option value="E">E</option>
-      <option value="P">P</option>
-    </select>
+  <!-- Selector de cantidad tipo “cards” + botón total -->
+  <section class="card" id="card-qty">
+    <div class="grid">
+      <div class="qty-grid" id="qtyGrid">
+        <div class="qty" data-q="1">1</div>
+        <div class="qty popular active" data-q="2">2<small>Más popular</small></div>
+        <div class="qty" data-q="5">5</div>
+        <div class="qty" data-q="10">10</div>
+        <div class="qty" data-q="25">25</div>
+        <div class="qty" data-q="50">50</div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:6px">
+        <div class="qty-ctrl">
+          <button class="btn-ghost" id="less">–</button>
+          <input id="qtyInput" class="qty-input" type="number" min="1" max="100" value="2" />
+          <button class="btn-ghost" id="more">+</button>
+        </div>
+        <button class="btn" id="btnParticipar">Participar — <span id="totalTxt">Bs. 1.074</span></button>
+      </div>
+      <div class="muted" style="font-size:.85rem">Los números se entregan de forma <b>aleatoria</b> de un conjunto de 10.000.</div>
+    </div>
+  </section>
 
-    <label>Número de documento</label>
-    <input type="text" id="docNumber" required />
+  <!-- Paso 1: Datos -->
+  <section class="card" id="step1">
+    <h2 style="margin:4px 0 10px">1) Tus datos</h2>
+    <div class="row">
+      <div class="grid">
+        <label>Nombre y apellido</label>
+        <input id="fullName" placeholder="Ej: María Pérez" autocomplete="name" required />
+      </div>
+      <div class="grid">
+        <div class="row" style="grid-template-columns:120px 1fr">
+          <div>
+            <label>Tipo documento</label>
+            <select id="docType"><option>V</option><option>E</option><option>J</option><option>P</option><option>G</option></select>
+          </div>
+          <div>
+            <label>Número</label>
+            <input id="docNumber" inputmode="numeric" placeholder="Ej: 12345678" required />
+          </div>
+        </div>
+        <div class="row">
+          <div>
+            <label>Teléfono</label>
+            <input id="phone" inputmode="tel" placeholder="Ej: 0412-0000000" required />
+          </div>
+          <div>
+            <label>Email</label>
+            <input id="email" type="email" placeholder="tu@correo.com" required />
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr class="sep" />
+    <button class="btn full" id="goStep2">Continuar</button>
+  </section>
 
-    <label>Teléfono</label>
-    <input type="text" id="phone" required />
+  <!-- Paso 2: Pago móvil -->
+  <section class="card hidden" id="step2">
+    <h2 style="margin:4px 0 10px">2) Realiza el pago móvil</h2>
+    <div class="grid">
+      <div class="payline"><div><b>Banco</b><br>Provincial (0108)</div><button class="copy" data-copy="Provincial (0108)">Copiar</button></div>
+      <div class="payline"><div><b>RIF/Cédula</b><br>15.857.050</div><button class="copy" data-copy="15857050">Copiar</button></div>
+      <div class="payline"><div><b>Teléfono</b><br>0424-4150022</div><button class="copy" data-copy="04244150022">Copiar</button></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:12px">
+      <button class="btn secondary" id="back1">Volver</button>
+      <button class="btn" id="goStep3">Ya pagué, reportar</button>
+    </div>
+    <p class="muted" style="margin-top:8px;font-size:.9rem">En el siguiente paso te pediremos <b>monto</b>, <b>referencia</b> y <b>captura</b>.</p>
+  </section>
 
-    <label>Email</label>
-    <input type="email" id="email" required />
+  <!-- Paso 3: Reporte + Captura -->
+  <section class="card hidden" id="step3">
+    <h2 style="margin:4px 0 10px">3) Sube tu captura y completa</h2>
+    <div class="grid">
+      <div class="row">
+        <div>
+          <label>Monto pagado (Bs.)</label>
+          <input id="amount" inputmode="decimal" placeholder="Ej: 537" required />
+        </div>
+        <div>
+          <label>Referencia (6 dígitos)</label>
+          <input id="ref6" inputmode="numeric" maxlength="6" placeholder="123456" required />
+        </div>
+      </div>
+      <div>
+        <label>Banco emisor</label>
+        <select id="bankEmitter">
+          <option>(0108) BBVA PROVINCIAL</option>
+          <option>(0102) BANCO DE VENEZUELA</option>
+          <option>(0105) MERCANTIL</option>
+          <option>(0191) BNC</option>
+          <option>(0134) BANESCO</option>
+          <option>(0114) BANCARIBE</option>
+          <option>(0172) BANCAMIGA</option>
+          <option>(0163) BANCO DEL TESORO</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="row">
+        <div>
+          <label>Documento del pagador</label>
+          <div class="row" style="grid-template-columns:120px 1fr">
+            <select id="payerDocType"><option>V</option><option>E</option><option>J</option><option>P</option><option>G</option></select>
+            <input id="payerDocNumber" inputmode="numeric" placeholder="N° documento" />
+          </div>
+        </div>
+        <div>
+          <label>Teléfono del pagador</label>
+          <input id="payerPhone" inputmode="tel" placeholder="Ej: 0414-0000000" />
+        </div>
+      </div>
+      <div>
+        <label>Fecha/Hora del pago</label>
+        <input id="paidAt" type="datetime-local" />
+      </div>
+      <div>
+        <label>📎 Captura del pago</label>
+        <input id="receipt" type="file" accept="image/*,application/pdf" required />
+        <p class="muted" style="margin:.4rem 0 0">Debe verse claro el <b>monto</b>, <b>referencia</b> y <b>fecha</b>.</p>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:12px">
+        <button class="btn secondary" id="back2">Volver</button>
+        <button class="btn" id="submitAll">Enviar y obtener mis números</button>
+      </div>
+      <div id="status" class="muted" style="margin-top:6px"></div>
+    </div>
+  </section>
 
-    <label>Cantidad de números</label>
-    <input type="number" id="quantity" min="1" max="100" required />
+  <!-- Éxito -->
+  <section class="card hidden" id="success">
+    <div class="success">
+      <h2>🎉 ¡Compra registrada!</h2>
+      <p>Te asignamos <b>tus números</b> de forma aleatoria.<br>✨ <b>Toma captura</b> de esta pantalla para conservarla.</p>
+      <div id="assignedBox" class="numbers"></div>
+      <div class="muted">Enviamos aviso a <b>sorteosprovenezuela@gmail.com</b>. Una vez <b>aprobada</b> por el equipo, tus números quedan fijos.</div>
+      <button class="btn" id="copyReceipt">Copiar comprobante</button>
+      <a class="btn secondary" href="#" onclick="location.reload()">Ir al inicio</a>
+    </div>
+  </section>
 
-    <hr />
+  <footer>© 2025 · Sorteos Pro Venezuela · Términos de uso</footer>
+</div>
 
-    <h3>💳 Pago Móvil</h3>
-    <p><strong>Provincial</strong><br>15.857.050<br>0424-4150022</p>
+<div id="toast" class="toast" role="status" aria-live="polite">Copiado</div>
 
-    <label>Monto enviado</label>
-    <input type="number" id="amount" step="0.01" required />
+<script>
+  // === CONFIG ===
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7v78_1zdefv6WSCPZ-rzed0hwaVhuyizT7fgXHZaoVjsNY42ZnbTxGUP6pum4SwI3Lg/exec";
+  const PRICE = 537; // Bs. por boleto
 
-    <label>Banco emisor</label>
-    <input type="text" id="bankEmitter" placeholder="Ej: Banco de Venezuela" required />
+  // === Helpers UI ===
+  const $ = s => document.querySelector(s);
+  const show = id => document.getElementById(id).classList.remove('hidden');
+  const hide = id => document.getElementById(id).classList.add('hidden');
+  const fmt = n => new Intl.NumberFormat('es-VE').format(n);
+  const toast = (m="Copiado") => { const t=$("#toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1400); };
 
-    <label>Referencia</label>
-    <input type="text" id="ref6" required />
+  // === Cantidad: cards y controles ===
+  const qtyInput = $("#qtyInput");
+  const totalTxt = $("#totalTxt");
+  const qtyCards = [...document.querySelectorAll(".qty")];
 
-    <label>Tipo de documento del pagador</label>
-    <select id="payerDocType">
-      <option value="V">V</option>
-      <option value="E">E</option>
-    </select>
+  function setQty(q){
+    q = Math.max(1, Math.min(100, parseInt(q||1,10)));
+    qtyInput.value = q;
+    totalTxt.textContent = `Bs. ${fmt(q*PRICE)}`;
+    qtyCards.forEach(c => c.classList.toggle("active", parseInt(c.dataset.q,10)===q));
+    // prefijar monto sugerido
+    const amt = $("#amount");
+    if(amt && (amt.value==="" || Number(amt.value)===(PRICE*(q-1)))){ amt.value = q*PRICE; }
+  }
+  qtyCards.forEach(c => c.addEventListener("click", ()=> setQty(c.dataset.q)));
+  $("#less").onclick = ()=> setQty(parseInt(qtyInput.value,10)-1);
+  $("#more").onclick = ()=> setQty(parseInt(qtyInput.value,10)+1);
+  qtyInput.addEventListener("input", e=> setQty(e.target.value));
+  setQty(2);
 
-    <label>Número de documento del pagador</label>
-    <input type="text" id="payerDocNumber" required />
+  // === Navegación ===
+  $("#btnParticipar").onclick = ()=> { window.scrollTo({top:document.body.offsetTop,behavior:"smooth"}); };
+  $("#goStep2").onclick = ()=> { hide("step1"); show("step2"); window.scrollTo({top:0,behavior:"smooth"}); };
+  $("#back1").onclick  = ()=> { hide("step2"); show("step1"); };
+  $("#goStep3").onclick = ()=> { hide("step2"); show("step3"); window.scrollTo({top:0,behavior:"smooth"}); };
+  $("#back2").onclick  = ()=> { hide("step3"); show("step2"); };
 
-    <label>Teléfono del pagador</label>
-    <input type="text" id="payerPhone" required />
+  // Copiar datos pago
+  document.querySelectorAll(".copy").forEach(btn=>{
+    btn.addEventListener("click", async ()=>{ try{ await navigator.clipboard.writeText(btn.dataset.copy); toast(); }catch{} });
+  });
 
-    <label>Fecha del pago</label>
-    <input type="date" id="paidAt" required />
+  // === Envío ===
+  $("#submitAll").onclick = async ()=>{
+    const fullName = $("#fullName").value.trim();
+    const docType = $("#docType").value;
+    const docNumber = $("#docNumber").value.trim();
+    const phone = $("#phone").value.trim();
+    const email = $("#email").value.trim();
+    const qty = Math.min(Math.max(parseInt(qtyInput.value||"1",10),1),100);
 
-    <label>📎 Cargar comprobante de pago</label>
-    <input type="file" id="proofFile" accept="image/*" required />
+    const amount = $("#amount").value.trim();
+    const ref6 = $("#ref6").value.trim();
+    const bankEmitter = $("#bankEmitter").value;
+    const payerDocType = $("#payerDocType").value;
+    const payerDocNumber = $("#payerDocNumber").value.trim();
+    const payerPhone = $("#payerPhone").value.trim();
+    const paidAt = $("#paidAt").value;
+    const file = $("#receipt").files[0];
 
-    <button type="submit">Participar</button>
+    if(!fullName || !docNumber || !phone || !email || !amount || !ref6 || !file){
+      $("#status").textContent = "Por favor completa los campos requeridos.";
+      return;
+    }
 
-    <div id="result"></div>
-  </form>
+    $("#submitAll").disabled = true;
+    $("#status").textContent = "Subiendo captura y registrando compra…";
 
-  <footer>
-    © 2025 Sorteos Pro Venezuela — ¡Mucha suerte!
-  </footer>
-
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7v78_1zdefv6WSCPZ-rzed0hwaVhuyizT7fgXHZaoVjsNY42ZnbTxGUP6pum4SwI3Lg/exec";
-
-    document.getElementById("purchaseForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const resultDiv = document.getElementById("result");
-      resultDiv.innerHTML = "⏳ Procesando tu compra...";
-
-      const fileInput = document.getElementById("proofFile");
-      const file = fileInput.files[0];
-      if (!file) return alert("Por favor, carga el comprobante de pago");
-
-      const base64 = await toBase64(file);
-      const data = {
-        action: "submitPurchase",
-        participant: {
-          fullName: document.getElementById("fullName").value,
-          docType: document.getElementById("docType").value,
-          docNumber: document.getElementById("docNumber").value,
-          phone: document.getElementById("phone").value,
-          email: document.getElementById("email").value,
-        },
-        quantity: document.getElementById("quantity").value,
-        payment: {
-          amount: document.getElementById("amount").value,
-          bankEmitter: document.getElementById("bankEmitter").value,
-          ref6: document.getElementById("ref6").value,
-          payerDocType: document.getElementById("payerDocType").value,
-          payerDocNumber: document.getElementById("payerDocNumber").value,
-          payerPhone: document.getElementById("payerPhone").value,
-          paidAt: document.getElementById("paidAt").value,
-        },
-        file: {
-          fileName: file.name,
-          mimeType: file.type,
-          base64: base64,
-        },
-        meta: {
-          ip: "",
-          userAgent: navigator.userAgent,
-        },
+    try{
+      const file64 = await fileToBase64(file);
+      const payload = {
+        action:"submitPurchase",
+        participant:{fullName, docType, docNumber, phone, email},
+        quantity: qty,
+        payment:{ amount, ref6, bankEmitter, payerDocType, payerDocNumber, payerPhone, paidAt },
+        file:{ fileName:file.name, mimeType:file.type, base64:file64 },
+        meta:{ userAgent:navigator.userAgent }
       };
 
-      try {
-        const response = await fetch(SCRIPT_URL, {
-          method: "POST",
-          body: JSON.stringify(data),
-        });
-        const res = await response.json();
-        if (res.ok) {
-          resultDiv.innerHTML = `
-            <div class="success">
-              <h3>🎉 ¡Compra registrada con éxito!</h3>
-              <p>Se te asignaron los números: <strong>${res.assignedNumbers.join(", ")}</strong></p>
-              <p>Guarda esta captura como comprobante.</p>
-              <p>📄 <a href="${res.proofUrl}" target="_blank">Ver tu comprobante</a></p>
-            </div>`;
-        } else {
-          resultDiv.innerHTML = `<div class="error">⚠️ Error: ${res.error}</div>`;
-        }
-      } catch (err) {
-        resultDiv.innerHTML = `<div class="error">❌ Error de conexión: ${err.message}</div>`;
-      }
-    });
+      const res = await fetch(SCRIPT_URL, { method:"POST", body: JSON.stringify(payload) });
+      const json = await res.json();
+      if(!json.ok) throw new Error(json.error || "Error de servidor");
 
-    function toBase64(file) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => resolve(reader.result);
-        reader.onerror = reject;
-      });
+      const assigned = json.assignedNumbers || [];
+      const box = $("#assignedBox"); box.innerHTML = "";
+      assigned.forEach(n=>{ const s=document.createElement("span"); s.className="num"; s.textContent=("00000"+n).slice(-5); box.appendChild(s); });
+
+      const receiptText = [
+        "Sorteos Pro Venezuela — Compra registrada",
+        "Participante: " + fullName + " — CI: " + docType + "-" + docNumber,
+        "Tel: " + phone + " — Email: " + email,
+        "Cantidad: " + qty + " — Números: " + assigned.join(", "),
+        "Pago (Bs.): " + amount + " — Ref: " + ref6 + " — Banco emisor: " + bankEmitter,
+        "Fecha pago: " + (paidAt||""),
+        "ID de compra: " + (json.purchaseId||"")
+      ].join("\n");
+      $("#copyReceipt").onclick = async ()=>{ try{ await navigator.clipboard.writeText(receiptText); toast("Comprobante copiado"); }catch{} };
+
+      hide("step3"); show("success"); confetti(); window.scrollTo({top:0,behavior:"smooth"});
+
+    }catch(err){
+      console.error(err);
+      $("#status").textContent = "Hubo un problema: " + err.message;
+      $("#submitAll").disabled = false;
     }
-  </script>
+  };
+
+  function fileToBase64(file){
+    return new Promise((resolve,reject)=>{
+      const r = new FileReader();
+      r.onload = ()=> resolve(r.result);
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+
+  // Confeti mini
+  function confetti(){
+    const cvs = document.getElementById("confetti"), ctx = cvs.getContext("2d");
+    const W = cvs.width = window.innerWidth, H = cvs.height = window.innerHeight;
+    const P = Array.from({length:110},()=>({x:Math.random()*W,y:Math.random()*-H,r:2+Math.random()*4,vy:2+Math.random()*3,vx:(Math.random()-.5)*1.4,a:Math.random()*Math.PI}));
+    let t=0; (function loop(){ ctx.clearRect(0,0,W,H); P.forEach(p=>{ p.y+=p.vy; p.x+=p.vx; p.a+=.08; if(p.y>H){p.y=-10; p.x=Math.random()*W;} ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a); ctx.fillStyle=`hsl(${(p.x+p.y+t)%360} 90% 60%)`; ctx.fillRect(-p.r,-p.r,p.r*2,p.r*2); ctx.restore(); }); t++; if(t<520) requestAnimationFrame(loop); })();
+  }
+</script>
 </body>
 </html>
