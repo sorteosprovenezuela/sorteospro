@@ -32,9 +32,17 @@
     .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px}
     .qty-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
     @media(min-width:760px){.qty-grid{grid-template-columns:repeat(6,1fr)}}
-    .qty{cursor:pointer;user-select:none;text-align:center;padding:16px 10px;border-radius:14px;background:var(--panel2);border:1px solid var(--line);transition:transform .05s ease;position:relative}
+    .qty{
+      cursor:pointer;user-select:none;text-align:center;
+      padding:22px 10px 16px; /* ↑ más espacio arriba para no tapar el número */
+      border-radius:14px;background:var(--panel2);border:1px solid var(--line);
+      transition:transform .05s ease;position:relative
+    }
     .qty:hover{transform:translateY(-1px)}
-    .qty.popular::after{content:"Más popular";position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:#000;font-weight:800;font-size:.68rem;padding:4px 8px;border-radius:999px;border:1px solid #000}
+    .qty.popular::after{
+      content:"Más popular";position:absolute;top:-16px;left:50%;transform:translateX(-50%);
+      background:var(--gold);color:#000;font-weight:800;font-size:.68rem;padding:4px 8px;border-radius:999px;border:1px solid #000
+    }
     .qty.active{outline:2px solid var(--gold);box-shadow:0 0 0 4px rgba(212,175,55,.15) inset}
     .row{display:grid;grid-template-columns:1fr;gap:12px}
     @media(min-width:760px){.row.split{grid-template-columns:1.2fr 1fr}}
@@ -45,7 +53,11 @@
     input,select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:#0f0f14;color:var(--text)}
     input::placeholder{color:#a7aab6}
     .payline{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px dashed var(--line);border-radius:12px;padding:10px;background:var(--panel2)}
-    .copy{display:inline-flex;gap:8px;align-items:center;padding:10px 12px;border-radius:10px;border:1px solid var(--line);cursor:pointer;background:#0f0f14;color:#fff;font-weight:700} /* texto blanco para móvil */
+    .copy{display:inline-flex;gap:8px;align-items:center;padding:10px 12px;border-radius:10px;border:1px solid var(--line);cursor:pointer;background:#0f0f14;color:#fff;font-weight:700} /* texto blanco móvil */
+    .file-wrap{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    input[type="file"]{display:none}
+    .file-btn{display:inline-flex;align-items:center;gap:8px}
+    .file-btn::before{content:"📎";}
     .muted{color:var(--muted)}
     .hidden{display:none}
     .success{display:grid;place-items:center;text-align:center;gap:14px;padding:18px}
@@ -77,13 +89,13 @@
     <img src="assets/promo.jpg" alt="Premio Octubre Feliz" />
     <div class="hero-body">
       <div>
-        <div class="hero-title">Premio Octubre Feliz</div>
+        <div class="hero-title">Premio Octubre Feliz: <b>$10.000</b></div>
         <div class="hero-meta">
           <span class="pill">📅 Sorteo: <b>25 de octubre de 2025</b></span>
           <span class="pill">🎟️ Boleto: <b>Bs. 537</b></span>
         </div>
       </div>
-      <!-- (Se quitó botón de Participa ahora) -->
+      <!-- (Se quitó botón) -->
     </div>
   </section>
 
@@ -163,7 +175,7 @@
     </div>
   </section>
 
-  <!-- Paso 3: solo Referencia + Captura -->
+  <!-- Paso 3 (Referencia + Captura con botón grande/moderno) -->
   <section class="card hidden" id="step3">
     <h2 style="margin:0 0 10px">3) Sube tu captura y completa</h2>
     <div class="row">
@@ -174,8 +186,12 @@
     </div>
     <div>
       <label>📎 Captura del pago</label>
-      <input id="receipt" type="file" accept="image/*,application/pdf" required />
-      <p class="muted" style="margin:.4rem 0 0">Debe verse claro la <b>referencia</b> y la <b>fecha</b>.</p>
+      <div class="file-wrap">
+        <input id="receipt" type="file" accept="image/*,application/pdf" required />
+        <label for="receipt" class="btn big file-btn">Seleccionar archivo</label>
+        <span id="fileName" class="muted">Ningún archivo seleccionado</span>
+      </div>
+      <p class="muted" style="margin:.4rem 0 0">Debe verse clara la <b>referencia</b> y la <b>fecha</b>.</p>
     </div>
     <div style="display:flex;gap:10px;margin-top:12px">
       <button class="btn secondary big" id="back2">Volver</button>
@@ -223,18 +239,17 @@
 <div id="toast" class="toast" role="status" aria-live="polite">Copiado</div>
 
 <script>
-  // === CONFIG (mantener integración) ===
+  // === CONFIG ===
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7v78_1zdefv6WSCPZ-rzed0hwaVhuyizT7fgXHZaoVjsNY42ZnbTxGUP6pum4SwI3Lg/exec";
-  const PRICE = 537; // Bs. por boleto
+  const PRICE = 537;
 
-  // === Helpers UI ===
   const $ = s => document.querySelector(s);
   const show = id => document.getElementById(id).classList.remove('hidden');
   const hide = id => document.getElementById(id).classList.add('hidden');
   const fmt = n => new Intl.NumberFormat('es-VE').format(n);
   const toast = (m="Copiado") => { const t=$("#toast"); t.textContent=m; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1400); };
 
-  // === Cantidad ===
+  // Cantidad
   const qtyInput = $("#qtyInput");
   const totalTxt = $("#totalTxt");
   const qtyCards = [...document.querySelectorAll(".qty")];
@@ -246,10 +261,9 @@
     qtyInput.value = q;
     const total = q * PRICE;
     totalTxt.textContent = `Bs. ${fmt(total)}`;
-    resQty.textContent = q;
-    resTotal.textContent = `Bs. ${fmt(total)}`;
+    if(resQty) resQty.textContent = q;
+    if(resTotal) resTotal.textContent = `Bs. ${fmt(total)}`;
     qtyCards.forEach(c => c.classList.toggle("active", parseInt(c.dataset.q,10)===q));
-    // Prefill implícito del monto (aunque ya no se pida)
   }
   qtyCards.forEach(c => c.addEventListener("click", ()=> setQty(c.dataset.q)));
   $("#less").onclick = ()=> setQty(parseInt(qtyInput.value,10)-1);
@@ -283,7 +297,15 @@
     btn.addEventListener("click", async ()=>{ try{ await navigator.clipboard.writeText(btn.dataset.copy); toast(); }catch{} });
   });
 
-  // === Envío (manteniendo integración con backend) ===
+  // Botón bonito para archivo + mostrar nombre
+  const fileInput = $("#receipt"), fileName = $("#fileName");
+  if(fileInput){
+    fileInput.addEventListener("change", ()=>{
+      fileName.textContent = fileInput.files[0] ? fileInput.files[0].name : "Ningún archivo seleccionado";
+    });
+  }
+
+  // Envío (integración intacta)
   $("#submitAll").onclick = async ()=>{
     const fullName = $("#fullName").value.trim();
     const docType = $("#docType").value;
@@ -292,8 +314,7 @@
     const email = $("#email").value.trim();
     const qty = Math.min(Math.max(parseInt(qtyInput.value||"1",10),1),100);
 
-    // Solo pedimos referencia y captura; lo demás lo rellenamos nosotros
-    const amount = (qty * PRICE).toString();      // monto sugerido automáticamente
+    const amount = (qty * PRICE).toString(); // monto sugerido
     const ref6 = $("#ref6").value.trim();
     const bankEmitter = "No indicado";
     const payerDocType = "";
